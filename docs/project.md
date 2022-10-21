@@ -9,6 +9,14 @@ hide:
 # Projects
 
 
+## AI
+
+<div class="card-grid" markdown>
+
+
+</div>
+
+
 ## Visualisations
 
 <div class="card-grid" markdown>
@@ -36,4 +44,10 @@ hide:
     A large amount of particles are simulated across a vector flow field, where the fields are determined by the frequencies of the music playing.
 
     [:octicons-arrow-right-24: More](/demo/music/index.html)
+
+- :material-chess-bishop: __DeepL Chess Notation__
+
+    ---
+
+    [:octicons-arrow-right-24: More](https://github.com/AjaniBilby/DeepL-Chess-Notation)
 </div>
