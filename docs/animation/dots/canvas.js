@@ -196,7 +196,9 @@ function Draw(){
 		dot.draw(dt);
 	}
 
-	window.requestAnimationFrame(Draw);
+	let t = Date.now();
+
+	setTimeout(window.requestAnimationFrame, 16-(t-now), Draw);
 };
 Draw();
 
