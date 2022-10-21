@@ -18,7 +18,7 @@ hide:
 
 ## Programming Languages
 
-<div class="card-grid" markdown>
+<div class="card-grid" actionable markdown>
 
 - :material-telescope: __Uniview__
     <span class="project-date">:octicons-calendar-24: Current</span>
@@ -52,7 +52,7 @@ hide:
 
 ## Visualisations
 
-<div class="card-grid" markdown>
+<div class="card-grid" actionable markdown>
 
 - :material-ghost-outline: __Slime Mould__
     <span class="project-date">:octicons-calendar-24: 2022</span>
@@ -112,7 +112,7 @@ hide:
 
 ## Applications
 
-<div class="card-grid" markdown>
+<div class="card-grid" actionable markdown>
 
 - :material-radio: __Dj Radio__
     <span class="project-date">:octicons-calendar-24: 2016</span>
@@ -147,7 +147,7 @@ hide:
 
 ## Hardware
 
-<div class="card-grid" markdown>
+<div class="card-grid" actionable markdown>
 
 - :material-keyboard: __GKM27__
     <span class="project-date">:octicons-calendar-24: 2022</span>
@@ -165,7 +165,7 @@ hide:
 
 ## Other
 
-<div class="card-grid" markdown>
+<div class="card-grid" actionable markdown>
 
 - :material-keyboard: __Woona IRC Bot__
     <span class="project-date">:octicons-calendar-24: 2016</span>
