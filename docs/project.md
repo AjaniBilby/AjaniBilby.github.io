@@ -21,6 +21,10 @@ hide:
 <div class="card-grid" actionable markdown>
 
 - :material-telescope: __Uniview__
+    :simple-javascript:
+    :simple-c:
+    
+    :simple-llvm:
     <span class="project-date">:octicons-calendar-24: Current</span>
 
     ---
@@ -30,6 +34,7 @@ hide:
     [:octicons-arrow-right-24: Source](https://github.com/qupa-project/uniview-lang)
 
 - :rainbow: __Qupa__
+    :simple-javascript:
     <span class="project-date">:octicons-calendar-24: 2020</span>
 
     ---
@@ -40,6 +45,7 @@ hide:
     [:octicons-arrow-right-24: Source](https://github.com/qupa-project/Qupa)
 
 - :thread: __Fiber__
+    :simple-javascript:
     <span class="project-date">:octicons-calendar-24: 2018</span>
 
     ---
@@ -55,6 +61,7 @@ hide:
 <div class="card-grid" actionable markdown>
 
 - :material-ghost-outline: __Slime Mould__
+    :simple-webgl:
     <span class="project-date">:octicons-calendar-24: 2022</span>
 
     ---
@@ -64,6 +71,7 @@ hide:
     [:octicons-arrow-right-24: Demo](https://www.shadertoy.com/view/7sByzW)
 
 - :material-chess-bishop: __DeepL Chess Notation__
+    :simple-javascript: :simple-tensorflow:
     <span class="project-date">:octicons-calendar-24: 2020</span>
 
     ---
@@ -73,6 +81,7 @@ hide:
     [:octicons-arrow-right-24: Source](https://github.com/AjaniBilby/DeepL-Chess-Notation)
 
 - :material-bird: __Dots__
+    :simple-javascript:
     <span class="project-date">:octicons-calendar-24: 2019</span>
 
     ---
@@ -82,6 +91,7 @@ hide:
     [:octicons-arrow-right-24: Demo](/animation/dots/index.html)
 
 - :material-disc-player: __Musical Boids__
+    :simple-javascript:
     <span class="project-date">:octicons-calendar-24: 2018</span>
 
     ---
@@ -91,6 +101,7 @@ hide:
     [:octicons-arrow-right-24: Demo](/demo/music/index.html)
 
 - :material-waveform: __Musical Vector Field__
+    :simple-javascript:
     <span class="project-date">:octicons-calendar-24: 2018</span>
 
     ---
@@ -100,6 +111,7 @@ hide:
     [:octicons-arrow-right-24: Demo](/demo/music-fluid/index.html)
 
 - :material-spider-web: __Wiki Web__
+    :simple-electron:
     <span class="project-date">:octicons-calendar-24: 2016</span>
 
     ---
@@ -115,6 +127,7 @@ hide:
 <div class="card-grid" actionable markdown>
 
 - :material-newspaper-remove: __No Press__
+    :simple-javascript:
     <span class="project-date">:octicons-calendar-24: 2020</span>
 
     ---
@@ -124,6 +137,7 @@ hide:
     [:octicons-arrow-right-24: Source](https://github.com/AjaniBilby/NoPress)
 
 - :material-radio: __J Plays__
+    :simple-electron:
     <span class="project-date">:octicons-calendar-24: 2016</span>
 
     ---
@@ -133,6 +147,7 @@ hide:
     [:octicons-arrow-right-24: Source](https://github.com/AjaniBilby/J-Plays)
 
 - :material-radio: __Dj Radio__
+    :simple-javascript:
     <span class="project-date">:octicons-calendar-24: 2016</span>
 
     ---
@@ -150,6 +165,7 @@ hide:
 <div class="card-grid" actionable markdown>
 
 - :material-keyboard: __GKM27__
+    :simple-c:
     <span class="project-date">:octicons-calendar-24: 2022</span>
 
     ---
@@ -167,6 +183,7 @@ hide:
 <div class="card-grid" actionable markdown>
 
 - :material-keyboard: __BNF Parser__
+    :simple-javascript:
     <span class="project-date">:octicons-calendar-24: 2021</span>
 
     ---
@@ -176,6 +193,7 @@ hide:
     [:octicons-arrow-right-24: Source](https://github.com/AjaniBilby/BNF-parser)
 
 - :material-keyboard: __Struct-DB__
+    :simple-javascript:
     <span class="project-date">:octicons-calendar-24: 2018</span>
 
     ---
@@ -185,6 +203,7 @@ hide:
     [:octicons-arrow-right-24: Source](https://github.com/AjaniBilby/struct-db)
 
 - :material-keyboard: __FlatFile-DB__
+    :simple-javascript:
     <span class="project-date">:octicons-calendar-24: 2018</span>
 
     ---
@@ -194,6 +213,7 @@ hide:
     [:octicons-arrow-right-24: Source](https://github.com/AjaniBilby/FlatFile-DB)
 
 - :material-keyboard: __Theader__
+    :simple-javascript:
     <span class="project-date">:octicons-calendar-24: 2017</span>
 
     ---
@@ -203,6 +223,7 @@ hide:
     [:octicons-arrow-right-24: Source](https://github.com/AjaniBilby/Threader)
 
 - :material-keyboard: __cosf__
+    :simple-javascript:
     <span class="project-date">:octicons-calendar-24: 2017</span>
 
     ---
@@ -212,6 +233,7 @@ hide:
     [:octicons-arrow-right-24: Source](https://github.com/AjaniBilby/cosf)
 
 - :material-keyboard: __Passer__
+    :simple-javascript:
     <span class="project-date">:octicons-calendar-24: 2016</span>
 
     ---
@@ -221,6 +243,7 @@ hide:
     [:octicons-arrow-right-24: Source](https://github.com/AjaniBilby/passer)
 
 - :material-keyboard: __Custom Radix__
+    :simple-javascript:
     <span class="project-date">:octicons-calendar-24: 2016</span>
 
     ---
@@ -230,6 +253,7 @@ hide:
     [:octicons-arrow-right-24: Source](https://github.com/AjaniBilby/custom-radix)
 
 - :material-keyboard: __Adatre__
+    :simple-javascript:
     <span class="project-date">:octicons-calendar-24: 2016</span>
 
     ---
@@ -239,6 +263,7 @@ hide:
     [:octicons-arrow-right-24: Source](https://github.com/AjaniBilby/adatre)
 
 - :material-keyboard: __Mass Random__
+    :simple-javascript:
     <span class="project-date">:octicons-calendar-24: 2016</span>
 
     ---
@@ -248,6 +273,7 @@ hide:
     [:octicons-arrow-right-24: Source](https://github.com/AjaniBilby/mass-random)
 
 - :material-keyboard: __Object Manipulation__
+    :simple-javascript:
     <span class="project-date">:octicons-calendar-24: 2016</span>
 
     ---
@@ -263,6 +289,7 @@ hide:
 <div class="card-grid" actionable markdown>
 
 - :material-keyboard: __Woona IRC Bot__
+    :simple-javascript:
     <span class="project-date">:octicons-calendar-24: 2016</span>
 
     ---
