@@ -54,6 +54,15 @@ hide:
 
 <div class="card-grid" markdown>
 
+- :material-ghost-outline: __Slime Mould__
+    <span class="project-date">:octicons-calendar-24: 2022</span>
+
+    ---
+
+    Used GPU shaders to compute a mould simulation. Each spore lays down attractors, and every spore is attracted to those. As the spores move around it creates a cool visualisation.
+
+    [:octicons-arrow-right-24: Demo](https://www.shadertoy.com/view/7sByzW)
+
 - :material-bird: __Dots__
     <span class="project-date">:octicons-calendar-24: 2019</span>
 
