@@ -74,10 +74,12 @@ extra:
       link: https://www.linkedin.com/in/ajani-b-00ba15156/
     - icon: fontawesome/brands/github
       link: https://github.com/AjaniBilby
+    - icon: fontawesome/solid/envelope
+      link: "mailto:me@ajanibilby.com"
 copyright: Copyright &copy; 2021 Ajani James Bilby
 
 
 nav:
   - Home: index.md
-  - Blog: blog/index.md
   - Projects: project.md
+  - Blog: blog/index.md

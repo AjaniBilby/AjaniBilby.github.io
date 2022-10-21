@@ -5,6 +5,7 @@ search:
 hide:
   - navigation
   - toc
+  - footer
 ---
 
 <style>
