@@ -1,7 +1,7 @@
 site_name: Ajani Bilby
 site_url: https://www.ajanibilby.com/
 site_description: Description
-edit_uri: https://github.com/ajanibilby/AjaniBilby.github.io/tree/main/docs
+edit_uri: https://github.com/AjaniBilby/AjaniBilby.github.io/blob/master/docs
 theme:
   name: material
   custom_dir: overrides
