@@ -31,15 +31,6 @@ theme:
     - navigation.sticky
   palette:
     - scheme: slate
-      toggle:
-        icon: material/weather-sunny
-        name: Switch to light mode
-      primary: pink
-      accent: purple
-    - scheme: default
-      toggle:
-        icon: material/weather-night
-        name: Switch to dark mode
       primary: pink
       accent: purple
   language: en
