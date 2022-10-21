@@ -7,6 +7,8 @@ hide:
   - tags
 ---
 
+# About Me
+
 I first started programming when I realised, I could make my own choose your own venture with Windows bat files. This was my first real programming project which I developed completely from scratch, and without any example or tutorials on how to make it.
 
 From there I continued playing around with different things, ending up hitting a complexity limit within bat files which forced me to move on. This led me to NodeJS (via realising I hated PHP & WordPress). Since I was still young and still had practically limitless time, I decided I’d take advantage of it. So, I set myself the goal of not using any libraries other than the language’s standard ones. I was going to build it all myself, so I knew how it all worked – even though I knew it wouldn’t be efficient or nice to work with, I was determined to do it for myself.
