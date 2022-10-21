@@ -1,0 +1,73 @@
+{% extends "main.html" %}
+
+{% block tabs %}
+  {{ super() }}
+
+  <style>
+    iframe{
+      display: block;
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      width: 100vw;
+      height: 100vh;
+      border: none;
+
+      z-index: -1;
+    }
+
+    header.md-header, nav.md-tabs {
+      background-color: transparent;
+
+      transition-property: background-color;
+      transition-duration: 0.2s;
+    }
+
+    header.md-header[data-md-state="shadow"] {
+      background-color: var(--md-primary-fg-color);
+    }
+
+    div.hero {
+      display: relative;
+      height: calc(100vh - 98px);
+      width: 100vw;
+    }
+
+    div.hero img {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+
+      width: 200px;
+      height: 200px;
+
+      border-color: var(--md-primary-fg-color);
+      border-style: solid;
+      border-radius: 100%;
+      border-width: 2px;
+    }
+  </style>
+
+  <iframe src="./animation/dots/index.html"></iframe>
+  <div class="hero">
+    <!-- <img src="img/profile.jpg"/> -->
+  </div>
+
+<script>
+  document.body.addEventListener('onscroll', (evt)=> {
+    console.log(evt);
+  })
+</script>
+{% endblock %}
+
+
+
+<!-- Content -->
+{% block content %}
+  {{ super() }}
+{% endblock %}
+
+<!-- Application footer -->
+{% block footer %}
+  {{ super() }}
+{% endblock %}
