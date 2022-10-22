@@ -7,7 +7,13 @@ hide:
 ---
 
 <style>
-  .project-date {
+  .project li p:first-child {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .project .date {
     padding-left: 0.4em;
     font-size: .7em;
   }
@@ -18,39 +24,38 @@ hide:
 
 ## Programming Languages
 
-<div class="card-grid" actionable markdown>
+<div class="card-grid project" actionable markdown>
 
-- :material-telescope: __Uniview__
-    <span class="project-date">:octicons-calendar-24: Current</span>
+- <span>:material-telescope: __Uniview__
+    <span class="date">:octicons-calendar-24: Current</span></span>
+    <span>:simple-javascript: :simple-c: :simple-llvm:</span>
 
     ---
 
     View once immutability enabling the safeties of immutable code, while enjoying near procedural performance
 
-    :simple-javascript: :simple-c: :simple-llvm:
-
     [:octicons-arrow-right-24: Source](https://github.com/qupa-project/uniview-lang)
 
-- :rainbow: __Qupa__
-    <span class="project-date">:octicons-calendar-24: 2020</span>
+- <span>:rainbow: __Qupa__
+    <span class="date">:octicons-calendar-24: 2020</span></span>
+    <span>:simple-javascript:</span>
 
     ---
 
     *___Qu___eued ___Pa___rallelism Language*  
     The predecessor to Uniview, a C++ like language designed to encourage implementation design which leads to easily parrallelisable programs.
 
-    :simple-javascript:
+    
 
     [:octicons-arrow-right-24: Source](https://github.com/qupa-project/Qupa)
 
-- :thread: __Fiber__
-    <span class="project-date">:octicons-calendar-24: 2018</span>
+- <span>:material-telescope: __Fiber__
+    <span class="date">:octicons-calendar-24: 2018</span></span>
+    <span>:simple-javascript:</span>
 
     ---
 
     The original toy language project which compiled to a bytecode, which then ran on a bispoke interpreter to understand language development - which inspired the future language projects I have ventured onto.
-
-    :simple-javascript:
 
     [:octicons-arrow-right-24: Source](https://github.com/AjaniBilby/fabric-lang)
 </div>
@@ -58,71 +63,65 @@ hide:
 
 ## Visualisations
 
-<div class="card-grid" actionable markdown>
+<div class="card-grid project" actionable markdown>
 
-- :material-ghost-outline: __Slime Mould__
-    <span class="project-date">:octicons-calendar-24: 2022</span>
+- <span>:material-ghost-outline: __Slime Mould__
+    <span class="date">:octicons-calendar-24: 2022</span></span>
+    <span >:simple-webgl:</span>
 
     ---
 
     Used GPU shaders to compute a mould simulation. Each spore lays down attractors, and every spore is attracted to those. As the spores move around it creates a cool visualisation.
 
-    :simple-webgl:
-
     [:octicons-arrow-right-24: Demo](https://www.shadertoy.com/view/7sByzW)
 
-- :material-chess-bishop: __DeepL Chess Notation__
-    <span class="project-date">:octicons-calendar-24: 2020</span>
+- <span>:material-chess-bishop: __DeepL Chess Notation__
+    <span class="date">:octicons-calendar-24: 2020</span></span>
+    <span>:simple-javascript: :simple-tensorflow:</span>
 
     ---
 
     This was a group project for a university assignment where we created a web app which you could take a photo of a chess board and it will give you the chess notation of the board. This runs completely on the mobile device with highly usable processing times for keeping board history for a local tournament.
 
-    :simple-javascript: :simple-tensorflow:
-
     [:octicons-arrow-right-24: Source](https://github.com/AjaniBilby/DeepL-Chess-Notation)
 
-- :material-bird: __Dots__
-    <span class="project-date">:octicons-calendar-24: 2019</span>
+- <span>:material-bird: __Dots__
+    <span class="date">:octicons-calendar-24: 2019</span></span>
+    <span>:simple-javascript:</span>
 
     ---
 
     Modified boids animation for the front page where the parameters dictating the boids are constantly changing, including into negative values to lead to interesting patterns.
 
-    :simple-javascript:
-
     [:octicons-arrow-right-24: Demo](/animation/dots/index.html)
 
-- :material-disc-player: __Musical Boids__
-    <span class="project-date">:octicons-calendar-24: 2018</span>
+- <span>:material-disc-player: __Musical Boids__
+    <span class="date">:octicons-calendar-24: 2018</span></span>
+    <span>:simple-javascript:</span>
 
     ---
 
     A modification of the dots animation where the parameters (*turnspeed, maxspeed, separation, attraction*) all change according to the music being played.
 
-    :simple-javascript:
-
     [:octicons-arrow-right-24: Demo](/demo/music/index.html)
 
-- :material-waveform: __Musical Vector Field__
-    <span class="project-date">:octicons-calendar-24: 2018</span>
+- <span>:material-waveform: __Musical Vector Field__
+    <span class="date">:octicons-calendar-24: 2018</span></span>
+    <span>:simple-javascript:</span>
 
     ---
 
     A large amount of particles are simulated across a vector flow field, where the fields are determined by the frequencies of the music playing.
 
-    :simple-javascript:
-
     [:octicons-arrow-right-24: Demo](/demo/music-fluid/index.html)
 
-- :material-spider-web: __Wiki Web__
-    <span class="project-date">:octicons-calendar-24: 2016</span>
+- <span>:material-spider-web: __Wiki Web__
+    <span class="date">:octicons-calendar-24: 2016</span></span>
+    <span>:simple-javascript: :simple-electron:</span>
 
     ---
 
     Give the software a start and an end page, and it will use the Wikipedia APIs to crawl via a bredth first search to find a network of possible routes from A → B and visualise all of them.
-
-    :simple-javascript: :simple-electron:
 
     [:octicons-arrow-right-24: Source](https://github.com/AjaniBilby/Wiki-Web)
 </div>
@@ -130,39 +129,36 @@ hide:
 
 ## Applications
 
-<div class="card-grid" actionable markdown>
+<div class="card-grid project" actionable markdown>
 
-- :material-newspaper-remove: __No Press__
-    <span class="project-date">:octicons-calendar-24: 2020</span>
+- <span>:material-newspaper-remove: __No Press__
+    <span class="date">:octicons-calendar-24: 2020</span></span>
+    <span>:simple-javascript:</span>
 
     ---
 
     A MVP for a drop in replacement for a dying Wordpress sight, which built in converstion to ingest the pages from a Wordpress site converting into a statically build blog.
 
-    :simple-javascript:
-
     [:octicons-arrow-right-24: Source](https://github.com/AjaniBilby/NoPress)
 
-- :material-radio: __J Plays__
-    <span class="project-date">:octicons-calendar-24: 2016</span>
+- <span>:material-radio: __J Plays__
+    <span class="date">:octicons-calendar-24: 2016</span></span>
+    <span>:simple-javascript: :simple-electron:</span>
 
     ---
 
     A light weight version of Dj Radio designed only as a local media player built in electron.
 
-    :simple-javascript: :simple-electron:
-
     [:octicons-arrow-right-24: Source](https://github.com/AjaniBilby/J-Plays)
 
-- :material-radio: __Dj Radio__
-    <span class="project-date">:octicons-calendar-24: 2016</span>
+- <span>:material-radio: __Dj Radio__
+    <span class="date">:octicons-calendar-24: 2016</span></span>
+    <span>:simple-javascript:</span>
 
     ---
 
     *A NodeJS implementation of a alternative to IceRadio.*  
     It will read an entire folder and index the music in it, reading all metadata from the MP3s. The admin can then queue music or allow the server to play random music. The server will re-encode the audio so all devices will see it as a single stream of audio, with server side buffering to fill client side caches on connection for instant stream start, while remaining in sync with other users.
-
-    :simple-javascript:
 
     [:octicons-arrow-right-24: Source](https://github.com/AjaniBilby/Dj-Radio)
 
@@ -173,14 +169,13 @@ hide:
 
 <div class="card-grid" actionable markdown>
 
-- :material-keyboard: __GKM27__
-    <span class="project-date">:octicons-calendar-24: 2022</span>
+- <span>:material-keyboard: __GKM27__
+    <span class="date">:octicons-calendar-24: 2022</span></span>
+    <span>:simple-c:</span>
 
     ---
 
     A macropad designed ergonomically for FPS shooters rather than typing. Also includes direct key-to-led mapping allowing reactive lighting visualisations, tuned to maintain a high polling rate.
-
-    :simple-c:
 
     [:octicons-arrow-right-24: Source](https://github.com/AjaniBilby/gkm27r)
 
@@ -190,115 +185,105 @@ hide:
 ## Libraries
 > When I started learning NodeJS, I decided I wouldn't use anything other than the built in libraries to force myself to learn the full features of the language, and to understand how the popular libraries worked and how they were made.
 
-<div class="card-grid" actionable markdown>
+<div class="card-grid project" actionable markdown>
 
-- :material-keyboard: __BNF Parser__
-    <span class="project-date">:octicons-calendar-24: 2021</span>
+- <span>:material-keyboard: __BNF Parser__
+    <span class="date">:octicons-calendar-24: 2021</span></span>
+    <span>:simple-javascript:</span>
 
     ---
 
     Takes in a BNF representation of a language and builds a syntax parser which than then be used to generate a syntax tree on language inputs.
 
-    :simple-javascript:
-
     [:octicons-arrow-right-24: Source](https://github.com/AjaniBilby/BNF-parser)
 
-- :material-keyboard: __Struct-DB__
-    <span class="project-date">:octicons-calendar-24: 2018</span>
+- <span>:material-keyboard: __Struct-DB__
+    <span class="date">:octicons-calendar-24: 2018</span></span>
+    <span>:simple-javascript:</span>
 
     ---
 
     A simple object oriented database implementation
 
-    :simple-javascript:
-
     [:octicons-arrow-right-24: Source](https://github.com/AjaniBilby/struct-db)
 
-- :material-keyboard: __FlatFile-DB__
-    <span class="project-date">:octicons-calendar-24: 2018</span>
+- <span>:material-keyboard: __FlatFile-DB__
+    <span class="date">:octicons-calendar-24: 2018</span></span>
+    <span>:simple-javascript:</span>
 
     ---
 
     A very simple flat table database implementation.
 
-    :simple-javascript:
-
     [:octicons-arrow-right-24: Source](https://github.com/AjaniBilby/FlatFile-DB)
 
-- :material-keyboard: __Theader__
-    <span class="project-date">:octicons-calendar-24: 2017</span>
+- <span>:material-keyboard: __Theader__
+    <span class="date">:octicons-calendar-24: 2017</span></span>
+    <span>:simple-javascript:</span>
 
     ---
 
     Give the API a function, then call the function through the API and it will send the data to a new worker to execute the function on.
 
-    :simple-javascript:
-
     [:octicons-arrow-right-24: Source](https://github.com/AjaniBilby/Threader)
 
-- :material-keyboard: __cosf__
-    <span class="project-date">:octicons-calendar-24: 2017</span>
+- <span>:material-keyboard: __cosf__
+    <span class="date">:octicons-calendar-24: 2017</span></span>
+    <span>:simple-javascript:</span>
 
     ---
 
     **C**ompact **o**bject **s**torage **f**ormat. Basically a custom BJSON implementation.
 
-    :simple-javascript:
-
     [:octicons-arrow-right-24: Source](https://github.com/AjaniBilby/cosf)
 
-- :material-keyboard: __Passer__
-    <span class="project-date">:octicons-calendar-24: 2016</span>
+- <span>:material-keyboard: __Passer__
+    <span class="date">:octicons-calendar-24: 2016</span></span>
+    <span>:simple-javascript:</span>
 
     ---
 
     A bispoke express like library with the ability for: wildcards in addresses; cookie decode/encode; query string decode/encode; multi-part form parsing (including files); session management; authorisation checks for certain url paths.
 
-    :simple-javascript:
-
     [:octicons-arrow-right-24: Source](https://github.com/AjaniBilby/passer)
 
-- :material-keyboard: __Custom Radix__
-    <span class="project-date">:octicons-calendar-24: 2016</span>
+- <span>:material-keyboard: __Custom Radix__
+    <span class="date">:octicons-calendar-24: 2016</span></span>
+    <span>:simple-javascript:</span>
 
     ---
 
     Define a character set for your radix, then it can convert to and from that stringified form.
 
-    :simple-javascript:
-
     [:octicons-arrow-right-24: Source](https://github.com/AjaniBilby/custom-radix)
 
-- :material-keyboard: __Adatre__
-    <span class="project-date">:octicons-calendar-24: 2016</span>
+- <span>:material-keyboard: __Adatre__
+    <span class="date">:octicons-calendar-24: 2016</span></span>
+    <span>:simple-javascript:</span>
 
     ---
 
     Asynchronous class-based referencing databasse
 
-    :simple-javascript:
-
     [:octicons-arrow-right-24: Source](https://github.com/AjaniBilby/adatre)
 
-- :material-keyboard: __Mass Random__
-    <span class="project-date">:octicons-calendar-24: 2016</span>
+- <span>:material-keyboard: __Mass Random__
+    <span class="date">:octicons-calendar-24: 2016</span></span>
+    <span>:simple-javascript:</span>
 
     ---
 
     Bounded random values, and random string generation
 
-    :simple-javascript:
-
     [:octicons-arrow-right-24: Source](https://github.com/AjaniBilby/mass-random)
 
-- :material-keyboard: __Object Manipulation__
-    <span class="project-date">:octicons-calendar-24: 2016</span>
+- <span>:material-keyboard: __Object Manipulation__
+    <span class="date">:octicons-calendar-24: 2016</span></span>
+    <span>:simple-javascript:</span>
 
     ---
 
     Difference of objects, merge two objects, deep copy of objects.
-
-    :simple-javascript:
 
     [:octicons-arrow-right-24: Source](https://github.com/AjaniBilby/object-manipulation)
 
@@ -306,16 +291,15 @@ hide:
 
 ## Other
 
-<div class="card-grid" actionable markdown>
+<div class="card-grid project" actionable markdown>
 
-- :material-keyboard: __Woona IRC Bot__
-    <span class="project-date">:octicons-calendar-24: 2016</span>
+- <span>:material-keyboard: __Woona IRC Bot__
+    <span class="date">:octicons-calendar-24: 2016</span></span>
+    <span>:simple-javascript:</span>
 
     ---
 
     A basic IRC bot which oberves how users react to it, and memorises those responses and attempts to use them later to respond to the user.
-
-    :simple-javascript:
 
     [:octicons-arrow-right-24: Source](https://github.com/AjaniBilby/Woona-IRC-Bot)
 
