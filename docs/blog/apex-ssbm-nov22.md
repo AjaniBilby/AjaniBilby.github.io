@@ -10,6 +10,9 @@ hide:
   - navigation
 ---
 
+!!! notes "Edits"
+	31/10: Updated the discussion section due to some math errors, no other sections are affected
+
 ## Introduction
 
 I've spent the past 300days (actually 296) recording my daily stats on Apex to see if I could find any trends hoping to understand more about their skill based match making (SBMM). I was inspired by [istiri7's](https://www.reddit.com/user/istiri7) post about recording [500 games of solo'q to learn more about SBMM](https://www.reddit.com/r/apexlegends/comments/tw9bmh/i_solo_qd_500_trios_to_learn_more_about_apex_sbmm/), and wondered if there are any trends you could see over the seasons, rather than at the macro level of 500 individual games.
