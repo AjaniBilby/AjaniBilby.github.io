@@ -160,7 +160,7 @@ Overall I believe SBMM **should** remain a part of Apex, however I do not agree 
 
 	If you don't believe me, and you're in the top 10-20% of players, I implore you to boot up a old shooter without SBMM. I recently went back to Xonotic (a quake like shooter), and for the first couple of hours it was fun as heck. Getting 3-10x the score of my opponents every game. But eventually it got kind of boring because I was never really challenged.
 
-	Also for those of you who aren't high skill level, thing about the fact for every 2KDR player, there is either one player with 0.5, or two players with 1KDR. That's just how the maths works out. If 10% of your player base has a 8KDR, the other 90% are forced to playwith them an equal about as anyone at any other skill level. That 90%'s average KDR will be 0.2, even if the majority of your player base doesn't care about kills, there are a lot that will leave if that's what playing is like.
+	Also for those of you who aren't high skill level, thing about the fact for every 2KDR player, there is either one player with 0.5, or two players with 1KDR. That's just how the maths works out. If 10% of your player base has a 8KDR, the other 90% are forced to play with them an equal about as anyone at any other skill level. That 90%'s average KDR will be 0.2, even if the majority of your player base doesn't care about kills, there are a lot that will leave if that's what playing is like.
 
 	$$
 	\begin{align*}
