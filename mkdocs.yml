@@ -48,9 +48,10 @@ plugins:
 
 markdown_extensions:
   - admonition
-  - meta
   - attr_list
+  - footnotes
   - md_in_html
+  - meta
   - pymdownx.arithmatex:
       generic: true
   - pymdownx.details
@@ -60,8 +61,15 @@ markdown_extensions:
   - pymdownx.highlight:
       use_pygments: true
   - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
   - pymdownx.tasklist:
       custom_checkbox: true
+  - pymdownx.critic
+  - pymdownx.caret
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.tilde
 
 extra_css:
   - stylesheets/extra.css

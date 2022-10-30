@@ -18,13 +18,27 @@ hide:
 
 # Blog
 
+## A Case Study on Apex SBMM
 
+<aside markdown>
+:octicons-calendar-24: October 10, 2022 ·
+:octicons-clock-24: 15 min read ·
+<a href="/tags/#apex-legends">:octicons-tag-24: Apex Legends</a>
+<a href="/tags/#match-making">:octicons-tag-24: Match Making</a>
+<a href="/tags/#sbmm">:octicons-tag-24: SBMM</a>
+</aside>
+
+---
+
+I tracked my KDR in Apex for 300days and here is what I found
+
+  [:octicons-arrow-right-24: Continue reading](apex-ssbm-nov22.md)
 
 ## Weighted Random
 
 <aside markdown>
 :octicons-calendar-24: September 9, 2018 ·
-:octicons-clock-24: 2 min read ·
+:octicons-clock-24: 4 min read ·
 <a href="/tags/#ipt">:octicons-tag-24: IPT</a>
 </aside>
 
@@ -39,7 +53,7 @@ The process of randomly selecing a value, where some values are more likely than
 
 <aside markdown>
 :octicons-calendar-24: July 12, 2018 ·
-:octicons-clock-24: 2 min read ·
+:octicons-clock-24: 1 min read ·
 <a href="/tags/#work-flow">:octicons-tag-24: Work-flow</a>
 </aside>
 
@@ -49,12 +63,26 @@ My personal preference
 
   [:octicons-arrow-right-24: Continue reading](10.md)
 
+## Buddy Memory Allocation
+
+<aside markdown>
+:octicons-calendar-24: April 5, 2018 ·
+:octicons-clock-24: 10 min read ·
+<a href="/tags/#data-structure">:octicons-tag-24: Data-Structure</a>
+</aside>
+
+---
+
+A common memory allocation algorithm
+
+  [:octicons-arrow-right-24: Continue reading](7.md)
+
 
 ## Case Study: Guess Who
 
 <aside markdown>
 :octicons-calendar-24: March 3, 2018 ·
-:octicons-clock-24: 2 min read ·
+:octicons-clock-24: 6 min read ·
 <a href="/tags/#case-study">:octicons-tag-24: Case-Study</a>
 </aside>
 
@@ -157,7 +185,7 @@ How UTF-8 encodes character ID & the difference between string length and string
 
 <aside markdown>
 :octicons-calendar-24: July 12, 2018 ·
-:octicons-clock-24: 2 min read
+:octicons-clock-24: 1 min read
 </aside>
 
 ---
