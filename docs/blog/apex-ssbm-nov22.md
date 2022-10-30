@@ -160,23 +160,95 @@ Overall I believe SBMM **should** remain a part of Apex, however I do not agree 
 
 	If you don't believe me, and you're in the top 10-20% of players, I implore you to boot up a old shooter without SBMM. I recently went back to Xonotic (a quake like shooter), and for the first couple of hours it was fun as heck. Getting 3-10x the score of my opponents every game. But eventually it got kind of boring because I was never really challenged.
 
-	Also for those of you who aren't high skill level, thing about the fact for every 2KDR player, there is either one player with 0.5, or two players with 1KDR. That's just how the maths works out. If 10% of your player base has a 8KDR, the other 90% are forced to play with them an equal about as anyone at any other skill level. That 90%'s average KDR will be 0.2, even if the majority of your player base doesn't care about kills, there are a lot that will leave if that's what playing is like.
+	Also for those of you who aren't high skill level, thing about the fact for every 2KDR player, there is either one player with 0.5, or two players with 1KDR. That's just how the maths works out. If we propose a situation with 60 players that play 100 matches - and to make the math simple being the last alive counts as a death, and there are no respawns.
+
+	$$
+	\begin{gathered}
+	\text{Propose all top 10% player have a 8KDR} && \\
+	\begin{aligned}
+	k + d &= 100 && \\
+	\frac{k}{d} &= 8 && \\
+	\end{aligned}
+	\end{gathered}
+	$$
+
+	$$
+	\begin{gathered}
+	\therefore \text{A top 10% player's individual stats would be} \\
+	\begin{aligned}
+	\frac{k}{100 - k} &= 8 && \\
+	k &= 8 \times (100 - k) && \\
+	k &= 800 - 8k && \\
+	9k &= 800 && \\
+	k &= 88.\overline{888} && \\
+	\end{aligned}
+	\end{gathered}
+	$$
+
+	$$
+	\begin{gathered}
+	\text{As a group the top 10% players would then make up:} \\
+	\begin{aligned}
+	k + d &= 100 && \\
+	d &= 100 - k && \\
+	d &= 11.\overline{111} && \\
+	\end{aligned}
+	\end{gathered}
+	$$
 
 	$$
 	\begin{align*}
-	10\% \times 8\text{ KDR} + 90\% \times x &= 1 && \\
-	90\% \times x &= 1 - 10\% \times 8\text{ KDR} && \\
-	x &= \frac{1 - 10\% \times 8\text{ KDR}}{90\%} && \\
-	x &= 0.\overline{222}\text{ KDR} && \\
+	k &= 88.\overline{888} \times 60 \times 10\% && \\
+	&= 533.\overline{333} && \\
+	:&= 533 && \\
+	d &= 11.\overline{111} \times 60 \times 10\% && \\
+	&= 66.\overline{666} && \\
+	:&= 66 && \\
 	\end{align*}
 	$$
+
+	$$
+	\begin{align*}
+	k &= \frac{ 60 \times 100 - 533 }{ 60 \times 90\% } && \\
+	:&= 101 && \\
+	d &= \frac{ 60 \times 100 - 66 }{ 60 \times 90\% } && \\
+	:&= 109
+	\end{align*}
+	$$
+
+	$$
+	\begin{gathered}
+	\text{A top 10% player would have the stats} \\
+	\begin{aligned}
+	k &= 533 && \\
+	d &= 66 && \\
+	\text{KDR} &= \frac{533}{66} && \\
+	&= 8.0\overline{75} && \\
+	\end{aligned}
+	\end{gathered}
+	$$
+
+	$$
+	\begin{gathered}
+	\text{A bottom 90% player would have the stats} \\
+	\begin{aligned}
+	k &= 101 && \\
+	d &= 109 && \\
+	\text{KDR} &= \frac{101}{109} && \\
+	&:= 0.927
+	\end{aligned}
+	\end{gathered}
+	$$
+
+	Honestly that's not such a bad break down, however this assumes there are only 8KDR players, and the rest with no middle ground. In the real world there would be a distribution of skill levels, meaning the lower down player will end up with a much lower KDR.
+
 
 !!! example "A World with "Perfect" sbmm"
 	In this world every match is perfectly balanced, all teams are perfectly equal, crafted to ensure all teams share the same weaknesses and strengths. In this world you will never feel a sense increase in skill. Ask you get better, you will be match made so that it won't make a difference in the out-come of your games. Because all teams are equal.
 
 	The only sense of progression you'll have is your moment to moment performance, how quickly you beam someone, how accurate are you shots, how sick of a wall bounce into superglide tap strafe. However none of that will actually impact how well your games perform over all, because who ever your versing will be able to counter that because all teams are balanced.
 
-Neither of these worlds results in a long living game. The best option is something inbetween that allows players to have fair games, while still allowing for a sense of progression. That's specifically why earlier I complained about a skill ceiling, and instead requested a logarithmic skill progression. This allows the majority of players to experience a sense of progression, however as you get closer and closer to the higher elo, your sense of progression will slow down. Because without we end up with the 8:0.2 KDR situation.
+Neither of these worlds results in a long living game. The best option is something inbetween that allows players to have fair games, while still allowing for a sense of progression. That's specifically why earlier I complained about a skill ceiling, and instead requested a logarithmic skill progression. This allows the majority of players to experience a sense of progression, however as you get closer and closer to the higher elo, your sense of progression will slow down. Because without we end up with the 8:0.9 KDR situation.
 
 ### Ranked vs SBMM
 
@@ -187,11 +259,11 @@ Neither of these worlds results in a long living game. The best option is someth
 
 	To get back at the question, pubs usually does not get a progression system and therefore is less sticky to players compared to ranked. But ranked can be scary, because people care about their progression number so you have to offer a way for people to engage with the game [...]
 
-To avoid the 8:0.2 SBMM problem, we need to include skill ratings to normal match making. But similarly ranked has become more like normal play, because they've made skill based system with an emphasis on fun. So you have a fun based mode with an emphasis on skill, and a skill based mode with an emphasis on fun, so the only difference between ranked and norms is the exact parameters and whether or not the skill rating is shown (i.e. rank). Since seems kind of like a sad rebranding of two things hoping people enjoy both namings.
+To avoid the 8:0.9 SBMM problem, we need to include skill ratings to normal match making. But similarly ranked has become more like normal play, because they've made skill based system with an emphasis on fun. So you have a fun based mode with an emphasis on skill, and a skill based mode with an emphasis on fun, so the only difference between ranked and norms is the exact parameters and whether or not the skill rating is shown (i.e. rank). Since seems kind of like a sad rebranding of two things hoping people enjoy both namings.
 
 ### Improvements
 
-Personally I think SBMM does need to be in normal game play, but big brother match making should be removed, or heavily nerfed. Yes that will increase the likely hood of the 8:0.2 problem, however we're only increasing it in the top end which creates a interesting side affect.
+Personally I think SBMM does need to be in normal game play, but big brother match making should be removed, or heavily nerfed. Yes that will increase the likely hood of the 8:0.9 problem, however we're only increasing it in the top end which creates a interesting side affect.
 
 For those who are in the middle of the pack, who would be versing people who are normally big-brothered into their lobbies. When they verse those players they will perform worse, that will bring down their rating, they will verse the lower players, have some fun easier frags and get their stats up to head butt with the high elo again. The high elo remain able to have a sense of progression, as their KDR can still feasibly go up, and they don't have the sensation of increasing sand bags at their heels pulling down their soul.
 
