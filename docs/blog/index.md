@@ -34,7 +34,7 @@ I tracked my KDR in Apex for 300days and here is what I found
 
   [:octicons-arrow-right-24: Continue reading](apex-ssbm-nov22.md)
 
-## Weighted Random
+<!-- ## Weighted Random
 
 <aside markdown>
 :octicons-calendar-24: September 9, 2018 ·
@@ -46,7 +46,7 @@ I tracked my KDR in Apex for 300days and here is what I found
 
 The process of randomly selecing a value, where some values are more likely than others
 
-  [:octicons-arrow-right-24: Continue reading](11.md)
+  [:octicons-arrow-right-24: Continue reading](11.md) -->
 
 
 ## Tabs vs Spaces
@@ -63,7 +63,7 @@ My personal preference
 
   [:octicons-arrow-right-24: Continue reading](10.md)
 
-## Buddy Memory Allocation
+<!-- ## Buddy Memory Allocation
 
 <aside markdown>
 :octicons-calendar-24: April 5, 2018 ·
@@ -75,10 +75,10 @@ My personal preference
 
 A common memory allocation algorithm
 
-  [:octicons-arrow-right-24: Continue reading](7.md)
+  [:octicons-arrow-right-24: Continue reading](7.md) -->
 
 
-## Case Study: Guess Who
+<!-- ## Case Study: Guess Who
 
 <aside markdown>
 :octicons-calendar-24: March 3, 2018 ·
@@ -90,10 +90,10 @@ A common memory allocation algorithm
 
 How do online 'Guess Who' apps really work
 
-  [:octicons-arrow-right-24: Continue reading](7.md)
+  [:octicons-arrow-right-24: Continue reading](7.md) -->
 
 
-## Case Study: Object Oriented Database (Static Schema)
+<!-- ## Case Study: Object Oriented Database (Static Schema)
 
 <aside markdown>
 :octicons-calendar-24: Feburary 19, 2018 ·
@@ -106,10 +106,10 @@ How do online 'Guess Who' apps really work
 
 How classic object-oriented databases encode their data
 
-  [:octicons-arrow-right-24: Continue reading](6.md)
+  [:octicons-arrow-right-24: Continue reading](6.md) -->
 
 
-## Case Study: Appendix: Key vs Value Hashing
+<!-- ## Case Study: Appendix: Key vs Value Hashing
 
 <aside markdown>
 :octicons-calendar-24: Feburary 19, 2018 ·
@@ -121,10 +121,10 @@ How classic object-oriented databases encode their data
 
 Squishing your hash functions for smaller ranges with acceptable results
 
-  [:octicons-arrow-right-24: Continue reading](5.md)
+  [:octicons-arrow-right-24: Continue reading](5.md) -->
 
 
-## Key vs Value Hashing
+<!-- ## Key vs Value Hashing
 
 <aside markdown>
 :octicons-calendar-24: Feburary 16, 2018 ·
@@ -136,10 +136,10 @@ Squishing your hash functions for smaller ranges with acceptable results
 
 Similar techniques for different goals
 
-  [:octicons-arrow-right-24: Continue reading](4.md)
+  [:octicons-arrow-right-24: Continue reading](4.md) -->
 
 
-## Relational Table DBMS
+<!-- ## Relational Table DBMS
 
 <aside markdown>
 :octicons-calendar-24: Feburary 16, 2018 ·
@@ -150,46 +150,4 @@ Similar techniques for different goals
 
 How table DBMSs actually store their data
 
-  [:octicons-arrow-right-24: Continue reading](3.md)
-
-
-## Two's Complement Integer
-
-<aside markdown>
-:octicons-calendar-24: Feburary 11, 2018 ·
-:octicons-clock-24: 2 min read
-</aside>
-
----
-
-How computers store negative integer values
-
-  [:octicons-arrow-right-24: Continue reading](2.md)
-
-
-## UTF-8 Encoding
-
-<aside markdown>
-:octicons-calendar-24: July 12, 2018 ·
-:octicons-clock-24: 2 min read
-</aside>
-
----
-
-How UTF-8 encodes character ID & the difference between string length and string size
-
-  [:octicons-arrow-right-24: Continue reading](1.md)
-
-
-## The Blog
-
-<aside markdown>
-:octicons-calendar-24: July 12, 2018 ·
-:octicons-clock-24: 1 min read
-</aside>
-
----
-
-Why is this here?
-
-  [:octicons-arrow-right-24: Continue reading](0.md)
+  [:octicons-arrow-right-24: Continue reading](3.md) -->
