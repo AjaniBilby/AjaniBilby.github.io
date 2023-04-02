@@ -1,6 +1,6 @@
 ---
 title: Async functions are needlessly killing your Javascript performance
-description: I tracked my KDR in Apex for 300days and here is what I found
+description: Using the `async`/`await` pattern can have unforeseen performance characterises leading to possible 14x slowdowns
 date: 2023-04-01
 tags:
   - Javascript

@@ -18,6 +18,23 @@ hide:
 
 # Blog
 
+## Async functions are needlessly killing your Javascript performance
+
+<aside markdown>
+:octicons-calendar-24: April 2, 2022 ·
+:octicons-clock-24: 8 min read ·
+<a href="/tags/#Javascript">:octicons-tag-24: Javascript</a>
+<a href="/tags/#Promise">:octicons-tag-24: Promise</a>
+<a href="/tags/#Performance">:octicons-tag-24: Performance</a>
+<a href="/tags/#Optimisation">:octicons-tag-24: Optimisation</a>
+</aside>
+
+---
+
+Using the `async`/`await` pattern can have unforeseen performance characterises leading to possible 14x slowdowns
+
+  [:octicons-arrow-right-24: Continue reading](async-js-performance-apr23.md)
+
 ## A Case Study on Apex SBMM
 
 <aside markdown>
