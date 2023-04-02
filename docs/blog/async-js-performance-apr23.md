@@ -20,7 +20,7 @@ I believe the untapped performance potential in asynchronous JavaScript features
 
 ## Context
 
-You can skip this section if you want, but here's a brief overview of the context. I've been working with a [bnf-parser](https://www.npmjs.com/package/bnf-parser) library that currently needs a complete file to be loaded for parsing it into a BNF-specified syntax tree. However, the library could be refactored to use clonable state generators, which output file characters sequentially and allow for copying at a specific point to resume reading later.
+You can skip this section if you want, but here's a brief overview of the context. I've been working with a [bnf-parser](https://www.npmjs.com/package/bnf-parser) library that currently needs a complete file to be loaded for parsing it into a BNF-specified syntax tree. However, the library could be refactored to use cloneable state generators, which output file characters sequentially and allow for copying at a specific point to resume reading later.
 
 So I tried to implementing it in Javascript be able to parse large +1GB files into partial syntax trees for processing large XML, just partly for fun, partly because I know also soon I'll need to be implementing something similar in a lower level language and this could be good practice.
 
@@ -58,7 +58,7 @@ class Cursor {
 
 We then have our main file which just creates a [StreamCache](https://github.com/AjaniBilby/BNF-parser/blob/350e9a00fc4ca06acc98245377fb705f00d286b8/source/lib/cache.ts#L52-L271), adds a cursor, and piping a `fs.createReadStream` in a kind of backwards way to the normal piping API, but this is due to the way `StreamCache` has been implemented to allow for NodeJS and WebJS readable stream API differences.
 
-> The cusor is added before piping to ensure the first bytes of data can't be read into the cache, then dropped because of it being inaccessible by any cursors
+> The cursor  is added before piping to ensure the first bytes of data can't be read into the cache, then dropped because of it being inaccessible by any cursors
 
 ```ts
 let stream = new experimental.StreamCache();
@@ -85,7 +85,7 @@ main();
 
 ### Wrapper Optimisation
 
-In the cursor before we could see we had an async function basically just acting as a wrapper, if you understand the async abstraction you'd know an async function just returns a promise, so there is no actual need in creating this extra async function, and instead we can just return the one created from the child call. (This has a level of performance benefit it really should't :D)
+In the cursor before we could see we had an async function basically just acting as a wrapper, if you understand the async abstraction you'd know an async function just returns a promise, so there is no actual need in creating this extra async function, and instead we can just return the one created from the child call. (This has a level of performance benefit it really shouldn't :D)
 
 To:
 ```ts
@@ -291,3 +291,7 @@ When using direct raw `Promise` API calls, there can be a strong argument made t
 The fact that simply [altering the wrapper call](#wrapper-optimisation) creates an almost 1.9x boost in performance should be horrifying for anyone who has used a compiled language. It's a simple function call redirection and can be easily optimised out of existence in most cases.
 
 We don't need to wait for the browsers to implement these optimisations, tools such as Typescript already offer transpiling to older ES version, clearly showing the compiler infrastructure has a deep understanding of the behaviour of the language. For a long time people have been saying that Typescript doesn't need to optimise your Javascript, since V8 already does such a good job, however that clearly isn't the case with this new async syntax - and with a little bit of static analysis an inlining alone Javascript can become way more performant.
+
+## Take Away
+
+Currently in V8's implementation of Javascript, `async` is just an abstraction of `Promise`s, and `Promise`s are just an abstraction of callbacks, and V8 doesn't appear to use the added information that an `async` function provides over a traditional callback to make any sort of optimisations.
