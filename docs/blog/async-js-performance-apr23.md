@@ -14,7 +14,7 @@ hide:
 
 # Async functions are needlessly killing your Javascript performance
 
-While numerous articles offer quick tips to enhance your async JavaScript performance using the Promise API, this discussion focuses on how simple program tweaks can lead to significant speed improvements. By optimizing your code, you could potentially achieve 1.9x or even 14x speed boosts.
+While numerous articles offer quick tips to enhance your async JavaScript performance using the Promise API, this discussion focuses on how simple program tweaks can lead to significant speed improvements. By optimizing your code, you could potentially achieve $1.9$x or even $14$x speed boosts.
 
 I believe the untapped performance potential in asynchronous JavaScript features is due to the V8 engine not providing the expected level of optimization for these features; and there are a few key indicators that suggest this possibility.
 
@@ -278,17 +278,17 @@ fstream.on('end', ()=>{
 | [Async w/ Peaking](#async-with-peaking)    |  1.970s |  2.085s |  3.054s | 11.890s |
 | [Disk Read](#disk-read)                    |  1.970s |  1.996s |  2.982s | 11.850s |
 
-It's kind of terrifying how well changing just the wrapper function `Cursor.next` is, it shows that there is easily optimisation improvements available, that plus the inlining `13.9x` performance improvement shows that there is room that even if V8 doesn't get around to implementing something, tools like Typescript certainly could.
+It's kind of terrifying how well changing just the wrapper function `Cursor.next` is, it shows that there is easily optimisation improvements available, that plus the inlining $13.9$x performance improvement shows that there is room that even if V8 doesn't get around to implementing something, tools like Typescript certainly could.
 
-Also if you look at the peaking example, we hit quite an interesting limit. In that case only `0.078%` of requests were fulfilled by the async function, meaning only about `9194` of `11746006` requests were waiting for the data to be loaded. This would imply our CPU is almost perfectly being feed by the incoming data.
+Also if you look at the peaking example, we hit quite an interesting limit. In that case only $0.078\%$ of requests were fulfilled by the async function, meaning only about $9194$ of $11746006$ requests were waiting for the data to be loaded. This would imply our CPU is almost perfectly being feed by the incoming data.
 
 ## Conclusion
 
-The performance of asynchronous JavaScript functions can be significantly improved by making simple tweaks to the code. The results of this case study demonstrate the potential for 1.9x to 14x speed boosts with manual optimizations. The V8's current lack of optimization for these features leaves room for further improvements in the future.
+The performance of asynchronous JavaScript functions can be significantly improved by making simple tweaks to the code. The results of this case study demonstrate the potential for $1.9$x to $14$x speed boosts with manual optimizations. The V8's current lack of optimization for these features leaves room for further improvements in the future.
 
 When using direct raw `Promise` API calls, there can be a strong argument made that attempting to optimise this behaviour without potentially altering execution behaviour can be extraordinarily hard to implement. But when we use the `async`/`await` syntax without even using the term `Promise`, our functions are now written in such a way you can make some pretty easy performance guaranteed optimisations.
 
-The fact that simply [altering the wrapper call](#wrapper-optimisation) creates an almost 1.9x boost in performance should be horrifying for anyone who has used a compiled language. It's a simple function call redirection and can be easily optimised out of existence in most cases.
+The fact that simply [altering the wrapper call](#wrapper-optimisation) creates an almost $1.9$x boost in performance should be horrifying for anyone who has used a compiled language. It's a simple function call redirection and can be easily optimised out of existence in most cases.
 
 We don't need to wait for the browsers to implement these optimisations, tools such as Typescript already offer transpiling to older ES version, clearly showing the compiler infrastructure has a deep understanding of the behaviour of the language. For a long time people have been saying that Typescript doesn't need to optimise your Javascript, since V8 already does such a good job, however that clearly isn't the case with this new async syntax - and with a little bit of static analysis an inlining alone Javascript can become way more performant.
 
