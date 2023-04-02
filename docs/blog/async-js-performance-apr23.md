@@ -14,33 +14,36 @@ hide:
 
 # Async functions are needlessly killing your Javascript performance
 
-There are already quite a few articles around which talk about little quick tips in the Promise APIs to help speed up your Async javascript problems, such as using `Promise.all`, however that isn't what this is about. Just a few simple tweaks to your program can create 1.9x speed ups, and ever more heavy overhauls can easily create a 14x speed BOOST to your program.
+While numerous articles offer quick tips to enhance your async JavaScript performance using the Promise API, this discussion focuses on how simple program tweaks can lead to significant speed improvements. By optimizing your code, you could potentially achieve 1.9x or even 14x speed boosts.
 
-Personally I believe all of this performance left on the table is the V8 hasn't given the new asynchronous Javascript features the optimisation love we have came to expect with Javascript, and I think there are a few key signs that really point towards this.
+I believe the untapped performance potential in asynchronous JavaScript features is due to the V8 engine not providing the expected level of optimization for these features; and there are a few key indicators that suggest this possibility.
 
-## A little bit of context
+## Context
 
-Feel free to skip this part, but I'm just going to quickly outline how I got here. I have a [bnf-parser](https://www.npmjs.com/package/bnf-parser) library which so far requires an entire file to be loaded to be able to ingest a file into a syntax tree specified by a BNF, however the way it's written it could easily be written using clonable state generators (so basically a generator which spits out the sequential characters of a file individually, but you can copy it at a given point to return to reading from that point later).
+You can skip this section if you want, but here's a brief overview of the context. I've been working with a [bnf-parser](https://www.npmjs.com/package/bnf-parser) library that currently needs a complete file to be loaded for parsing it into a BNF-specified syntax tree. However, the library could be refactored to use clonable state generators, which output file characters sequentially and allow for copying at a specific point to resume reading later.
 
-So I tried to implement something similar in Javascript to allow be to parse large +1GB files into partial syntax trees for processing large XML, just partly for fun, partly because I know also soon I'll need to be implementing something similar in a low level language and this could be good practice.
+So I tried to implementing it in Javascript be able to parse large +1GB files into partial syntax trees for processing large XML, just partly for fun, partly because I know also soon I'll need to be implementing something similar in a lower level language and this could be good practice.
 
 ## The Case Study
 
-So I want a in-between layer between my readable stream of data from the disk, and being able to call iteratively forward for small parts of text, with small amounts of pre-define back tracking. So I create a [Cursor](https://github.com/AjaniBilby/BNF-parser/blob/350e9a00fc4ca06acc98245377fb705f00d286b8/source/lib/cache.ts#L7-L45) which can only iterate forwards, each time returning a string of the characters it passes over, and at any point it can be cloned, then the clones can independently move forward. Plus these cursors may need to wait for data currently being streamed before they can return - and for a bit of added difficulty we don't just want to cache the entire file in memory, so we'll discard information which can no longer be reached by any cursor. Also to make the code base nice to maintain we'll use the async/await pattern to avoid any potential nasty callback chains.
+I aimed to create a layer between the readable data stream from disk and allowing iteratively calling forward for small text portions with limited backtracking. I implemented a [Cursor](https://github.com/AjaniBilby/BNF-parser/blob/350e9a00fc4ca06acc98245377fb705f00d286b8/source/lib/cache.ts#L7-L45) that iterates forward, returning the passed-over characters as a string. Cursors can be cloned, and clones can independently move forward. Importantly cursors *may* need to wait for data currently streamed to become available before returning the next substring. To minimize memory usage, we discard unreachable data - implementing all of this into a async/await pattern to avoid complex callback chains or unnecessary event loop blocking.
 
-So we have a cursor, which has an **async** read call, which then **async**hronously calls to a [StreamCache](https://github.com/AjaniBilby/BNF-parser/blob/350e9a00fc4ca06acc98245377fb705f00d286b8/source/lib/cache.ts#L52-L271) to attempt to read from the cache, plus potentially multiple cursors could be attempting to read the latest information which hasn't been loaded yet, so we'll need a mutex lock situation to kind of wake up those cursors when the information is ready, so we'll need an **async** call to a [PromiseQueue](https://github.com/AjaniBilby/BNF-parser/blob/350e9a00fc4ca06acc98245377fb705f00d286b8/source/lib/promise-queue.ts).
+> Side note: We use pooling for caching, placing each chunk read from the disk into an array and manipulating the array to free cached data. This method reduces resize operations and string manipulation. However, it can cause NodeJS to report false memory usage, as chunks allocated by the OS are sometimes not counted until manipulated within the application domain.
 
-Now if we're reading a `1GB` file, in `100 byte` chunks, that's going to be at least `10000000 IOs` IOs through three layers of asynchronous calls. And this is where the problem start's to be come catastrophic, because these aren't just asynchronous functions, they're actually just a language level abstraction of callbacks, with almost no added level of optimisations which can be inferred from their async nature (don't worry we can add some of these optimisations by hand pretty easily).
+The cursor features an async read call, asynchronously connecting to a [StreamCache](https://github.com/AjaniBilby/BNF-parser/blob/350e9a00fc4ca06acc98245377fb705f00d286b8/source/lib/cache.ts#L52-L271) to read from the cache. Multiple cursors may attempt to read the latest unavailable information, requiring a [condition variable](https://en.cppreference.com/w/cpp/thread/condition_variable) lock - an async call to a [PromiseQueue](https://github.com/AjaniBilby/BNF-parser/blob/350e9a00fc4ca06acc98245377fb705f00d286b8/source/lib/promise-queue.ts) is used to manages this.
+
+Reading a `1GB` file in `100-byte` chunks leads to at least `10,000,000 IOs` through three async call layers. The problem becomes catastrophic since these functions are essentially language-level abstractions of callbacks, lacking optimizations that come with their async nature. However, we can manually implement optimizations to alleviate this issue.
 
 ## Testing
 
 So let's go through the base implementation, then a few different variations and optimisations; or you can skip ahead to the [results](#results) then work your way backwards if you prefer.
 
-Also just a quick note about the methodology used, each test was ran 10 times instantly after one another from a cold idle start - the first result of each test was always greatly slower than preceding, with the other 9 results being almost identical. This is quite interesting since the tests we queued using CLI, rather than running the function multiple times in Javascript which would create the expected performance improvements over time as V8 optimises the code - however it seems to have done that anyway via some disk caching somewhere temporary, which is why also the cold start between each different test was required.
+A quick note about the testing methodology: Each test ran 10 times consecutively, starting from a cold state. The first result was consistently slower, while the other nine were nearly identical. This suggests either NodeJS temporarily saves optimized code between runs, or the NAS intelligently caches the file for quicker access. The latter is more likely, as longer durations between cold starts result in slower initial executions.
 
-Also [here is the file](https://dumps.wikimedia.org/simplewiki/latest/simplewiki-latest-pages-articles.xml.bz2) I'm actually streaming in case you're wondering (I'm streaming it already decompressed though)
+The test file used is [here](https://dumps.wikimedia.org/simplewiki/latest/simplewiki-latest-pages-articles.xml.bz2) (streamed as a standalone XML file).
 
 ### Full Async
+
 So we have a cursor which we can call next on, which forwards the request to the [StreamCache](https://github.com/AjaniBilby/BNF-parser/blob/350e9a00fc4ca06acc98245377fb705f00d286b8/source/lib/cache.ts#L52-L271) - which then handles all of the actual read behaviour.
 
 ```ts
@@ -207,7 +210,8 @@ fstream.on('end', ()=>{
 ### Callback
 
 Finally we need a test to make sure this isn't a de-optimisation bug, if we go back to the callback hell days, however do we fair?  
-Note: I didn't rewrite the `signal.wait()` as trying to create an optimised call back system inside a for loop will be hell on earth to implement. And yes we do need a while loop, because it might take more than one chunk to load in to fulfill the requested read - chunk sizes can be weird sometimes and inconsistent, plus maybe you just want a large chunk read at once :shrug:
+> Note: I didn't rewrite the `signal.wait()` as trying to create an optimised call back system inside a for loop will be hell on earth to implement.
+> And yes we do need a while loop, because it might take more than one chunk to load in to fulfill the requested read - chunk sizes can be weird sometimes and inconsistent, plus maybe you just want a large chunk read at once :shrug:
 
 ```ts
 export class StreamCache {
@@ -265,19 +269,25 @@ fstream.on('end', ()=>{
 
 ## Results
 
-| Case              | Duration (Min) | Median | Mean | Max |
-| :-                | -: | -: | -: | -: |
-| Full Async        | 27.742s | 28.339s | 28.946s | 35.203s |
-| Async Wrapper Opt | 14.758s | 14.977s | 15.761s | 22.847s |
-| Callback          | 13.753s | 13.902s | 14.683s | 21.909s |
-| Inlined Async     |  2.025s |  2.048s |  3.037s | 11.847s |
-| w/ Peaking        |  1.970s |  2.085s |  3.054s | 11.890s |
-| Disk Read         |  1.970s |  1.996s |  2.982s | 11.850s |
+| Case                                       | Duration (Min) | Median | Mean | Max |
+| :- | -: | -: | -: | -: |
+| [Full Async](#full-async)                  | 27.742s | 28.339s | 28.946s | 35.203s |
+| [Async Wrapper Opt](#wrapper-optimisation) | 14.758s | 14.977s | 15.761s | 22.847s |
+| [Callback](#callback)                      | 13.753s | 13.902s | 14.683s | 21.909s |
+| [Inlined Async](#inlined)                  |  2.025s |  2.048s |  3.037s | 11.847s |
+| [Async w/ Peaking](#async-with-peaking)    |  1.970s |  2.085s |  3.054s | 11.890s |
+| [Disk Read](#disk-read)                    |  1.970s |  1.996s |  2.982s | 11.850s |
 
 It's kind of terrifying how well changing just the wrapper function `Cursor.next` is, it shows that there is easily optimisation improvements available, that plus the inlining `13.9x` performance improvement shows that there is room that even if V8 doesn't get around to implementing something, tools like Typescript certainly could.
 
-Also if you look at the peaking example, we hit quite an interesting limit. In that case only `919417/1173681200` `0.078%` of requests were fulfilled by the async function, meaning only about `9194` of `11746006` requests were waiting for the data to be loaded. This would imply our CPU is almost perfectly being feed by the SSD, and does ask the question, what if we rate limit the read speed to make it closer to network speeds than disk speeds - which would be more realistic for real work performance.
-
-However when we do limit it by IO of course we can no longer compare the throughput with `async` as easily since we're no longer CPU limited.
+Also if you look at the peaking example, we hit quite an interesting limit. In that case only `0.078%` of requests were fulfilled by the async function, meaning only about `9194` of `11746006` requests were waiting for the data to be loaded. This would imply our CPU is almost perfectly being feed by the incoming data.
 
 ## Conclusion
+
+The performance of asynchronous JavaScript functions can be significantly improved by making simple tweaks to the code. The results of this case study demonstrate the potential for 1.9x to 14x speed boosts with manual optimizations. The V8's current lack of optimization for these features leaves room for further improvements in the future.
+
+When using direct raw `Promise` API calls, there can be a strong argument made that attempting to optimise this behaviour without potentially altering execution behaviour can be extraordinarily hard to implement. But when we use the `async`/`await` syntax without even using the term `Promise`, our functions are now written in such a way you can make some pretty easy performance guaranteed optimisations.
+
+The fact that simply [altering the wrapper call](#wrapper-optimisation) creates an almost 1.9x boost in performance should be horrifying for anyone who has used a compiled language. It's a simple function call redirection and can be easily optimised out of existence in most cases.
+
+We don't need to wait for the browsers to implement these optimisations, tools such as Typescript already offer transpiling to older ES version, clearly showing the compiler infrastructure has a deep understanding of the behaviour of the language. For a long time people have been saying that Typescript doesn't need to optimise your Javascript, since V8 already does such a good job, however that clearly isn't the case with this new async syntax - and with a little bit of static analysis an inlining alone Javascript can become way more performant.
