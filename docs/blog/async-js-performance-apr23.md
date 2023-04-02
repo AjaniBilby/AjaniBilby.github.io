@@ -295,3 +295,5 @@ We don't need to wait for the browsers to implement these optimisations, tools s
 ## Take Away
 
 Currently in V8's implementation of Javascript, `async` is just an abstraction of `Promise`s, and `Promise`s are just an abstraction of callbacks, and V8 doesn't appear to use the added information that an `async` function provides over a traditional callback to make any sort of optimisations.
+
+While the majority of async Javascript code is probably IO bounded instead of CPU, this likely won't affect the majority of Javascript code. However your code can still potentially be limited by these performance characteristics even if you're not the one doing the heavy CPU load. Potentially based on how you to interface with a given library could give you massively different performance characteristics depending no if you're using non-synchronous code or not, and the problem can be exacerbated depending on the implementation details of the library.
