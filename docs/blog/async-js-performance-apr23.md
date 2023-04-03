@@ -34,7 +34,7 @@ Reading a `1GB` file in `100-byte` chunks leads to at least `10,000,000 IOs` thr
 
 ## Testing
 
-So let's go through the base implementation, then a few different variations and optimisations; or you can skip ahead to the [results](#results) then work your way backwards if you prefer.
+So let's go through the base implementation, then a few different variations and optimisations; or you can skip ahead to the [#results](#results) then work your way backwards if you prefer.
 
 A quick note about the testing methodology: Each test ran 10 times consecutively, starting from a cold state. The first result was consistently slower, while the other nine were nearly identical. This suggests either NodeJS temporarily saves optimized code between runs, or the NAS intelligently caches the file for quicker access. The latter is more likely, as longer durations between cold starts result in slower initial executions.
 
@@ -269,12 +269,12 @@ fstream.on('end', ()=>{
 
 | Case                                       | Duration (Min) | Median | Mean | Max |
 | :- | -: | -: | -: | -: |
-| [Full Async](#full-async)                  | 27.742s | 28.339s | 28.946s | 35.203s |
-| [Async Wrapper Opt](#wrapper-optimisation) | 14.758s | 14.977s | 15.761s | 22.847s |
-| [Callback](#callback)                      | 13.753s | 13.902s | 14.683s | 21.909s |
-| [Inlined Async](#inlined)                  |  2.025s |  2.048s |  3.037s | 11.847s |
-| [Async w/ Peaking](#async-with-peaking)    |  1.970s |  2.085s |  3.054s | 11.890s |
-| [Disk Read](#disk-read)                    |  1.970s |  1.996s |  2.982s | 11.850s |
+| [#Full Async](#full-async)                  | 27.742s | 28.339s | 28.946s | 35.203s |
+| [#Async Wrapper Opt](#wrapper-optimisation) | 14.758s | 14.977s | 15.761s | 22.847s |
+| [#Callback](#callback)                      | 13.753s | 13.902s | 14.683s | 21.909s |
+| [#Inlined Async](#inlined)                  |  2.025s |  2.048s |  3.037s | 11.847s |
+| [#Async w/ Peaking](#async-with-peaking)    |  1.970s |  2.085s |  3.054s | 11.890s |
+| [#Disk Read](#disk-read)                    |  1.970s |  1.996s |  2.982s | 11.850s |
 
 It's kind of terrifying how well changing just the wrapper function `Cursor.next` is, it shows that there is easily optimisation improvements available, that plus the inlining $13.9$x performance improvement shows that there is room that even if V8 doesn't get around to implementing something, tools like Typescript certainly could.
 
@@ -286,7 +286,7 @@ The performance of asynchronous JavaScript functions can be significantly improv
 
 When using direct raw `Promise` API calls, there can be a strong argument made that attempting to optimise this behaviour without potentially altering execution behaviour can be extraordinarily hard to implement. But when we use the `async`/`await` syntax without even using the term `Promise`, our functions are now written in such a way you can make some pretty easy performance guaranteed optimisations.
 
-The fact that simply [altering the wrapper call](#wrapper-optimisation) creates an almost $1.9$x boost in performance should be horrifying for anyone who has used a compiled language. It's a simple function call redirection and can be easily optimised out of existence in most cases.
+The fact that simply [#altering the wrapper call](#wrapper-optimisation) creates an almost $1.9$x boost in performance should be horrifying for anyone who has used a compiled language. It's a simple function call redirection and can be easily optimised out of existence in most cases.
 
 We don't need to wait for the browsers to implement these optimisations, tools such as Typescript already offer transpiling to older ES version, clearly showing the compiler infrastructure has a deep understanding of the behaviour of the language. For a long time people have been saying that Typescript doesn't need to optimise your Javascript, since V8 already does such a good job, however that clearly isn't the case with this new async syntax - and with a little bit of static analysis an inlining alone Javascript can become way more performant.
 
