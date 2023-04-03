@@ -1,5 +1,5 @@
 ---
-title: Async functions are needlessly killing your Javascript performance
+title: "Maximizing Async JavaScript Performance: How to Achieve 1.9x-14x Speed Boosts with Simple Tweaks"
 description: Using the `async`/`await` pattern can have unforeseen performance characterises leading to possible 14x slowdowns
 date: 2023-04-01
 tags:
@@ -12,9 +12,7 @@ hide:
   - navigation
 ---
 
-# Async functions are needlessly killing your Javascript performance
-
-While numerous articles offer quick tips to enhance your async JavaScript performance using the Promise API, this discussion focuses on how simple program tweaks can lead to significant speed improvements. By optimizing your code, you could potentially achieve $1.9$x or even $14$x speed boosts.
+While numerous articles offer quick tips to enhance your async JavaScript performance using extra Promise API features, this discussion focuses on how program structure tweaks can lead to significant speed improvements. By optimizing your code, you could potentially achieve 1.9x or even 14x speed boosts.
 
 I believe the untapped performance potential in asynchronous JavaScript features is due to the V8 engine not providing the expected level of optimization for these features; and there are a few key indicators that suggest this possibility.
 
@@ -58,7 +56,7 @@ class Cursor {
 
 We then have our main file which just creates a [StreamCache](https://github.com/AjaniBilby/BNF-parser/blob/350e9a00fc4ca06acc98245377fb705f00d286b8/source/lib/cache.ts#L52-L271), adds a cursor, and piping a `fs.createReadStream` in a kind of backwards way to the normal piping API, but this is due to the way `StreamCache` has been implemented to allow for NodeJS and WebJS readable stream API differences.
 
-> The cursor  is added before piping to ensure the first bytes of data can't be read into the cache, then dropped because of it being inaccessible by any cursors
+> The cursor is added before piping to ensure the first bytes of data can't be read into the cache, then dropped because of it being inaccessible by any cursors
 
 ```ts
 let stream = new experimental.StreamCache();
@@ -296,4 +294,9 @@ We don't need to wait for the browsers to implement these optimisations, tools s
 
 Currently in V8's implementation of Javascript, `async` is just an abstraction of `Promise`s, and `Promise`s are just an abstraction of callbacks, and V8 doesn't appear to use the added information that an `async` function provides over a traditional callback to make any sort of optimisations.
 
-While the majority of async Javascript code is probably IO bounded instead of CPU, this likely won't affect the majority of Javascript code. However your code can still potentially be limited by these performance characteristics even if you're not the one doing the heavy CPU load. Potentially based on how you to interface with a given library could give you massively different performance characteristics depending no if you're using non-synchronous code or not, and the problem can be exacerbated depending on the implementation details of the library.
+While the majority of active async Javascript code is probably IO bounded instead of CPU, this likely won't affect the majority of Javascript code. However your code can still potentially be limited by these performance characteristics even if you're not the one doing the heavy CPU load. Potentially based on how you to interface with a given library could give you massively different performance characteristics depending no if you're using non-synchronous code or not, and the problem can be exacerbated depending on the implementation details of the library.
+
+### What you can do now
+
+1. As a general rule, try and avoid async when possible - and no callbacks are not the solution, because it has the same performance impact.
+2. When possible instead of creating a new Promise bounded by another - attempt to merge them into a single Promise when possible.
