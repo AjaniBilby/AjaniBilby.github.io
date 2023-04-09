@@ -1,5 +1,5 @@
 ---
-title: "Maximizing Async JavaScript Performance: How to Achieve 1.9x-14x Speed Boosts with Simple Tweaks"
+title: "Async functions are needlessly killing your Javascript performance"
 description: Using the `async`/`await` pattern can have unforeseen performance characterises leading to possible 14x slowdowns
 date: 2023-04-01
 tags:

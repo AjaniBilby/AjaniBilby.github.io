@@ -18,7 +18,7 @@ hide:
 
 # Blog
 
-## Maximizing Async JavaScript Performance: How to Achieve 1.9x-14x Speed Boosts with Simple Tweaks
+## Async functions are needlessly killing your Javascript performance
 
 <aside markdown>
 :octicons-calendar-24: April 2, 2022 ·
