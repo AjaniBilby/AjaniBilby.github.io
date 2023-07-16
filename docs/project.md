@@ -193,9 +193,9 @@ hide:
 
     ---
 
-    Takes in a BNF representation of a language and builds a syntax parser which than then be used to generate a syntax tree on language inputs.
+    Takes in a BNF representation of a language and compiles a wasm syntax parser including type-definitions corresponding to the possible syntax tree layout.
 
-    [:octicons-arrow-right-24: Source](https://github.com/AjaniBilby/BNF-parser)
+    [:octicons-arrow-right-24: Read More](https://bnf-parser.ajanibilby.com)
 
 - <span>:material-keyboard: __Struct-DB__
     <span class="date">:octicons-calendar-24: 2018</span></span>
