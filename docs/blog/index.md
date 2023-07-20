@@ -18,6 +18,22 @@ hide:
 
 # Blog
 
+## Wasm is not going to save Javascript
+
+<aside markdown>
+:octicons-calendar-24: July 20, 2023 ·
+<a href="/tags/#web-assembly">:octicons-tag-24: Web Assembly</a>
+<a href="/tags/#wasm">:octicons-tag-24: Wasm</a>
+<a href="/tags/#javascript">:octicons-tag-24: Javascript</a>
+<a href="/tags/#performance">:octicons-tag-24: Performance</a>
+</aside>
+
+---
+
+Why web assembly is not going to save javascript performance
+
+  [:octicons-arrow-right-24: Continue reading](wasm-is-not-going-to-save-javascript-jul23.md)
+
 ## Async functions are needlessly killing your Javascript performance
 
 <aside markdown>
