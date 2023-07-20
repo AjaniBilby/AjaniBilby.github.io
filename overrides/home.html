@@ -4,9 +4,10 @@
   {{ super() }}
 
   <style>
+
     iframe{
       display: block;
-      position: absolute;
+      position: relative;
       top: 0px;
       left: 0px;
       width: 100vw;
@@ -17,7 +18,9 @@
     }
 
     header.md-header, nav.md-tabs {
-      background-color: transparent;
+      background-color: rgba(200,200,200,0.07);
+
+      backdrop-filter: blur(5px) !important;
 
       transition-property: background-color;
       transition-duration: 0.2s;
@@ -28,46 +31,43 @@
     }
 
     div.hero {
-      display: relative;
-      height: calc(75vh - 98px);
-      width: 100vw;
+      display: block;
+      position: absolute;
+      inset: 0 0 0 0;
     }
 
-    div.hero img {
+    div.overlay {
       position: absolute;
-      bottom: 20px;
-      right: 20px;
-
-      width: 200px;
-      height: 200px;
-
-      border-color: var(--md-primary-fg-color);
-      border-style: solid;
-      border-radius: 100%;
-      border-width: 2px;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 25vh;
+      z-index: -1;
+      background-color: rgba(46, 48, 62, 85%);
+      backdrop-filter: blur(5px);
+      box-shadow: 0px 0px 20px 0px #0005;
     }
 
     .md-content {
-      background-color: rgba(46, 48, 62, 85%);
+      background-color: rgb(46, 48, 62);
+      position: relative;
     }
   </style>
 
-  <iframe src="./animation/dots/index.html"></iframe>
   <div class="hero">
-    <!-- <img src="img/profile.jpg"/> -->
+    <iframe src="./animation/dots/index.html"></iframe>
   </div>
+  <div style="height: 75vh"></div>
 
-<script>
-  document.body.addEventListener('onscroll', (evt)=> {
-    console.log(evt);
-  })
-</script>
 {% endblock %}
 
 
 
 <!-- Content -->
 {% block content %}
+  <div class="overlay">
+    <div></div>
+  </div>
   {{ super() }}
 {% endblock %}
 

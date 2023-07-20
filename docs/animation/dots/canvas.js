@@ -7,8 +7,9 @@ canvas.width = canvasWidth;
 canvas.height = canvasHeight;
 
 
-let dotColour = "#ff5c8d";
-// let dotColour = "#c72160";
+let dotColour = "#e92063";
+// const lineColour = "#e92063";
+const lineColour = "#ab9df2";
 
 
 
@@ -169,7 +170,7 @@ function Draw(){
 	// Draw conections
 	ctx.shadowBlur = 1;
 	ctx.lineWidth = 0.5;
-	ctx.strokeStyle = "#ff90bd";
+	ctx.strokeStyle = lineColour;
 	for (let dot of points){
 		let count = 3;
 		let dist = 0;
