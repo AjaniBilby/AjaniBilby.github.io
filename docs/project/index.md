@@ -5,19 +5,6 @@ hide:
   - tags
 ---
 
-<style>
-  .project li p:first-child {
-    display: flex;
-    width: 100%;
-    flex-direction: row;
-    justify-content: space-between;
-  }
-  .project .date {
-    padding-left: 0.4em;
-    font-size: .7em;
-  }
-</style>
-
 
 # All Projects
 

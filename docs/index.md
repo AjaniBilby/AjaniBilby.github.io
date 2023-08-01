@@ -13,7 +13,7 @@ I find it fascinating how the tools we use shape what we create, and then how we
 
 ## Favorite Projects
 
-<div class="card-grid project" actionable markdown>
+<div class="card-grid project" large actionable markdown>
 
 - <span>:material-robot: __Predictable Bot__
     <span class="date">:octicons-calendar-24: 2023</span></span>
@@ -29,6 +29,18 @@ I find it fascinating how the tools we use shape what we create, and then how we
     Ensuring as the old version is shutdown it completes currently active operations while not interrupting the start up of the new version
 
     [:octicons-arrow-right-24: Website](https://predictable.ajanibilby.com/)
+
+- <span>:material-source-branch: __htmX Router__
+    <span class="date">:octicons-calendar-24: 2023</span></span>
+    <span>:simple-typescript:</span>
+
+    ---
+
+    A request router for generating html responses statically similarly to [remix.js](https://remix.run/docs/en/main/guides/routing)'s router.
+    But instead being fully server-side rendered, also computing the minimal route returnable to a client given their current route,
+    and sending only the minimal route back to the client and telling them where in the DOM to swap it out.
+
+    [:octicons-arrow-right-24: Source](https://github.com/AjaniBilby/htmx-router)
 
 - <span>:material-book-open: __Wiki Thesaurus__
     <span class="date">:octicons-calendar-24: 2023</span></span>
