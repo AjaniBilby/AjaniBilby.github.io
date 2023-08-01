@@ -21,7 +21,7 @@ theme:
       quote: octicons/quote-16
     repo: fontawesome/brands/github-square
     logo: material/duck
-  favicon: material/duck
+  favicon: img/favicon.ico
   features:
     - search.suggest
     - header.autohide
