@@ -92,5 +92,7 @@ copyright: Copyright &copy; 2021 Ajani James Bilby
 
 nav:
   - Home: index.md
-  - Projects: project.md
+  # - History: history.md
+  - Projects: project/index.md
   - Blog: blog/index.md
+  - Reading List: reading-list.md

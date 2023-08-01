@@ -1,7 +1,6 @@
 ---
 hide:
   - navigation
-  - toc
   - feedback
   - tags
 ---
@@ -20,7 +19,7 @@ hide:
 </style>
 
 
-# Projects
+# All Projects
 
 ## Programming Languages
 
@@ -131,13 +130,41 @@ hide:
 
 <div class="card-grid project" actionable markdown>
 
+- <span>:material-robot: __Predictable Bot__
+    <span class="date">:octicons-calendar-24: 2023</span></span>
+    <span>:simple-typescript:</span>
+
+    ---
+
+    A discord bot + website to allow people to post predictions allowing people to place wagers on what they think will happen.
+
+    The whole system was designed to be robust, ensuring no faux money is lost even in the even of an error.
+    And also ensuring that there is zero down time even during upgrades.
+
+    Ensuring as the old version is shutdown it completes currently active operations while not interrupting the start up of the new version
+
+    [:octicons-arrow-right-24: Website](https://predictable.ajanibilby.com/)
+
+- <span>:material-book-open: __Wiki Thesaurus__
+    <span class="date">:octicons-calendar-24: 2023</span></span>
+    <span>:simple-python:</span>
+
+    ---
+
+    Uses the simple-wiki dataset to generate a graph structure for wikipedia based on links between articles.
+
+    From that it then uses Jaccard similarity to take any given input word or entity and attempt to find similar entities.
+    Hopefully producing thesaurus like results (spoiler it's not thesaurus like)
+
+    [:octicons-arrow-right-24: Source](https://github.com/AjaniBilby/wiki-thesaurus)
+
 - <span>:material-newspaper-remove: __No Press__
     <span class="date">:octicons-calendar-24: 2020</span></span>
     <span>:simple-javascript:</span>
 
     ---
 
-    A MVP for a drop in replacement for a dying Wordpress sight, which built in converstion to ingest the pages from a Wordpress site converting into a statically build blog.
+    A MVP for a drop in replacement for a dying Wordpress sight, which has built in conversion to ingest the pages from a Wordpress site converting it into a statically built blog.
 
     [:octicons-arrow-right-24: Source](https://github.com/AjaniBilby/NoPress)
 
@@ -158,7 +185,10 @@ hide:
     ---
 
     *A NodeJS implementation of a alternative to IceRadio.*  
-    It will read an entire folder and index the music in it, reading all metadata from the MP3s. The admin can then queue music or allow the server to play random music. The server will re-encode the audio so all devices will see it as a single stream of audio, with server side buffering to fill client side caches on connection for instant stream start, while remaining in sync with other users.
+
+    It will read an entire folder and index the music in it, reading all metadata from the MP3s. The admin can then queue music or allow the server to play random music.
+    
+    The server will re-encode the audio so all devices will see it as a single stream of audio, with server side buffering to fill client side caches on connection for instant stream start, while remaining in sync with other users.
 
     [:octicons-arrow-right-24: Source](https://github.com/AjaniBilby/Dj-Radio)
 
@@ -189,11 +219,14 @@ hide:
 
 - <span>:material-keyboard: __BNF Parser__
     <span class="date">:octicons-calendar-24: 2021</span></span>
-    <span>:simple-javascript:</span>
+    <span>:typescript-javascript:</span>
 
     ---
 
-    Takes in a BNF representation of a language and compiles a wasm syntax parser including type-definitions corresponding to the possible syntax tree layout.
+    Takes in a BNF representation of a syntax and compiles it all the way down to a wasm application for parsing that specific syntax with compiler optimisations applied to it.
+    
+    The compiler also generates type-definitions corresponding to the possible syntax tree layout.
+    To create a much more ergonomic developer experience using the outputted syntax, since the structure will be somewhat known.
 
     [:octicons-arrow-right-24: Read More](https://bnf-parser.ajanibilby.com)
 
