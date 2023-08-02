@@ -24,6 +24,7 @@ theme:
   favicon: img/favicon.ico
   features:
     - search.suggest
+    - search.share
     - header.autohide
     - content.code.annotate
     - navigation.top
@@ -36,8 +37,7 @@ theme:
   language: en
 
 plugins:
-  - search:
-      prebuild_index: true
+  - search
   # - offline
   - git-revision-date:
       enabled_if_env: CI
@@ -75,7 +75,6 @@ extra_css:
   - stylesheets/extra.css
 
 extra_javascript:
-  - javascripts/mathjax.js
   - https://polyfill.io/v3/polyfill.min.js?features=es6
   - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
 
