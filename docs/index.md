@@ -75,3 +75,6 @@ I find it fascinating how the tools we use shape what we create, and then how we
   [:octicons-arrow-right-24: All Projects](/project)
 
 </div>
+
+
+<img src="https://raw.githubusercontent.com/AjaniBilby/ajanibilby/master/github-metrics.svg" style="display: block; margin: 20px auto 0px auto;" />
