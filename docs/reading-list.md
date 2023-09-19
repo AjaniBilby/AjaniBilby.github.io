@@ -17,3 +17,4 @@ This is a list of my favorite articles/books that I've ever read
 - Marcan (2017). [Debugging an evil Go runtime bug](https://marcan.st/2017/12/debugging-an-evil-go-runtime-bug/)
 - Fumitake Koga, Ichiro Kishimi (2013). Courage to be Disliked
 - M. Levchin (2023) [Shamir Secret Sharing](https://max.levch.in/post/724289457144070144/shamir-secret-sharing)
+- James Iry (2009) [A Brief, Incomplete, and Mostly Wrong History of Programming Lnaguages](http://james-iry.blogspot.com/2009/05/brief-incomplete-and-mostly-wrong.html)
