@@ -18,6 +18,19 @@ hide:
 
 # Blog
 
+## CSS Auto Font Scaling
+
+<aside markdown>
+:octicons-calendar-24: November 15, 2023 ·
+<a href="/tags/#css">:octicons-tag-24: CSS</a>
+</aside>
+
+---
+
+Resizing text to fit the space
+
+  [:octicons-arrow-right-24: Continue reading](auto-scaling-text-nov23.md)
+
 ## Wasm is not going to save Javascript
 
 <aside markdown>

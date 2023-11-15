@@ -15,6 +15,19 @@ I find it fascinating how the tools we use shape what we create, and then how we
 
 <div class="card-grid project" large actionable markdown>
 
+- <span>:material-keyboard: __BNF Parser__
+    <span class="date">:octicons-calendar-24: 2021</span></span>
+    <span>:simple-typescript:</span>
+
+    ---
+
+    Takes in a BNF representation of a syntax and compiles it all the way down to a wasm application for parsing that specific syntax with compiler optimisations applied to it.
+    
+    The compiler also generates type-definitions corresponding to the possible syntax tree layout.
+    To create a much more ergonomic developer experience using the outputted syntax, since the structure will be somewhat known.
+
+    [:octicons-arrow-right-24: Website](https://bnf-parser.ajanibilby.com)
+
 - <span>:material-robot: __Predictable Bot__
     <span class="date">:octicons-calendar-24: 2023</span></span>
     <span>:simple-typescript:</span>
@@ -36,7 +49,7 @@ I find it fascinating how the tools we use shape what we create, and then how we
 
     ---
 
-    A request router for generating html responses statically similarly to [remix.js](https://remix.run/docs/en/main/guides/routing)'s router.
+    A request router for generating html responses statically similarly to [Remix.js](https://remix.run/docs/en/main/guides/routing)'s router.
     But instead being fully server-side rendered, also computing the minimal route returnable to a client given their current route,
     and sending only the minimal route back to the client and telling them where in the DOM to swap it out.
 
@@ -55,19 +68,6 @@ I find it fascinating how the tools we use shape what we create, and then how we
 
     [:octicons-arrow-right-24: Source](https://github.com/AjaniBilby/wiki-thesaurus)
 
-- <span>:material-keyboard: __BNF Parser__
-    <span class="date">:octicons-calendar-24: 2021</span></span>
-    <span>:simple-typescript:</span>
-
-    ---
-
-    Takes in a BNF representation of a syntax and compiles it all the way down to a wasm application for parsing that specific syntax with compiler optimisations applied to it.
-    
-    The compiler also generates type-definitions corresponding to the possible syntax tree layout.
-    To create a much more ergonomic developer experience using the outputted syntax, since the structure will be somewhat known.
-
-    [:octicons-arrow-right-24: Website](https://bnf-parser.ajanibilby.com)
-
 </div>
 
 <div markdown style="margin-left: 2em">
@@ -77,4 +77,8 @@ I find it fascinating how the tools we use shape what we create, and then how we
 </div>
 
 
-<img src="https://raw.githubusercontent.com/AjaniBilby/ajanibilby/master/github-metrics.svg" style="display: block; margin: 20px auto 0px auto;" />
+<div style="display: flex; margin: 20px 0 0 0; justify-content: center;">
+  <a href="https://github.com/AjaniBilby">
+    <img src="https://raw.githubusercontent.com/AjaniBilby/ajanibilby/master/github-metrics.svg" />
+  </a>
+</div>
