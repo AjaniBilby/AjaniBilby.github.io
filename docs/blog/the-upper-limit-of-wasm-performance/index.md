@@ -1,6 +1,6 @@
 ---
 title: The Upper Limits of WebAssembly Performance
-description: hello
+description: Winter.js's web assembly performance looked sys, so I did some digging
 date: 2024-03-14
 tags:
   - web assembly
