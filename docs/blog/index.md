@@ -31,6 +31,21 @@ Resizing text to fit the space
 
   [:octicons-arrow-right-24: Continue reading](auto-scaling-text-nov23.md)
 
+## The Upper Limits of WebAssembly Performance
+
+<aside markdown>
+:octicons-calendar-24: March 14, 2024 ·
+<a href="/tags/#web-assembly">:octicons-tag-24: Web Assembly</a>
+<a href="/tags/#performance">:octicons-tag-24: Performance</a>
+<a href="/tags/#http">:octicons-tag-24: http</a>
+</aside>
+
+---
+
+Winter.js's web assembly performance looked sus, so I did some digging
+
+  [:octicons-arrow-right-24: Continue reading](./the-upper-limit-of-wasm-performance/)
+
 ## Wasm is not going to save Javascript
 
 <aside markdown>
@@ -95,7 +110,7 @@ The process of randomly selecing a value, where some values are more likely than
   [:octicons-arrow-right-24: Continue reading](11.md) -->
 
 
-## Tabs vs Spaces
+<!-- ## Tabs vs Spaces
 
 <aside markdown>
 :octicons-calendar-24: July 12, 2018 ·
@@ -107,7 +122,7 @@ The process of randomly selecing a value, where some values are more likely than
 
 My personal preference
 
-  [:octicons-arrow-right-24: Continue reading](10.md)
+  [:octicons-arrow-right-24: Continue reading](10.md) -->
 
 <!-- ## Buddy Memory Allocation
 
