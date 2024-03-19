@@ -1,5 +1,5 @@
 ---
-title: The Upper Limits of WebAssembly Performance
+title: The Upper Limits of WebAssembly Net Performance
 description: Winter.js's web assembly performance looked sus, so I did some digging
 date: 2024-03-14
 tags:
