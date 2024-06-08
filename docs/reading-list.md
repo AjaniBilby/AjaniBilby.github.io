@@ -18,3 +18,5 @@ This is a list of my favorite articles/books that I've ever read
 - Fumitake Koga, Ichiro Kishimi (2013). Courage to be Disliked
 - M. Levchin (2023) [Shamir Secret Sharing](https://max.levch.in/post/724289457144070144/shamir-secret-sharing)
 - James Iry (2009) [A Brief, Incomplete, and Mostly Wrong History of Programming Lnaguages](http://james-iry.blogspot.com/2009/05/brief-incomplete-and-mostly-wrong.html)
+- Richard P. Gabriel [The Rise of Worse is Better](https://www.dreamsongs.com/RiseOfWorseIsBetter.html)
+- Edward Zitron (2024) [The Man Who Killed Google Search](https://www.wheresyoured.at/the-men-who-killed-google/)
