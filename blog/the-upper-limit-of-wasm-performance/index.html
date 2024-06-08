@@ -1,0 +1,880 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Winter.js's web assembly performance looked sus, so I did some digging">
+      
+      
+      
+        <link rel="canonical" href="https://www.ajanibilby.com/blog/the-upper-limit-of-wasm-performance/">
+      
+      
+      
+      
+      <link rel="icon" href="../../img/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.26">
+    
+    
+      
+        <title>The Upper Limits of WebAssembly Net Performance - Ajani Bilby</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.6543a935.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+  
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+    
+    
+  
+  
+  <style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M1 7.775V2.75C1 1.784 1.784 1 2.75 1h5.025c.464 0 .91.184 1.238.513l6.25 6.25a1.75 1.75 0 0 1 0 2.474l-5.026 5.026a1.75 1.75 0 0 1-2.474 0l-6.25-6.25A1.752 1.752 0 0 1 1 7.775Zm1.5 0c0 .066.026.13.073.177l6.25 6.25a.25.25 0 0 0 .354 0l5.025-5.025a.25.25 0 0 0 0-.354l-6.25-6.25a.25.25 0 0 0-.177-.073H2.75a.25.25 0 0 0-.25.25ZM6 5a1 1 0 1 1 0 2 1 1 0 0 1 0-2Z"/></svg>');--md-admonition-icon--abstract:url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M2.5 1.75v11.5c0 .138.112.25.25.25h3.17a.75.75 0 0 1 0 1.5H2.75A1.75 1.75 0 0 1 1 13.25V1.75C1 .784 1.784 0 2.75 0h8.5C12.216 0 13 .784 13 1.75v7.736a.75.75 0 0 1-1.5 0V1.75a.25.25 0 0 0-.25-.25h-8.5a.25.25 0 0 0-.25.25Zm13.274 9.537v-.001l-4.557 4.45a.75.75 0 0 1-1.055-.008l-1.943-1.95a.75.75 0 0 1 1.062-1.058l1.419 1.425 4.026-3.932a.75.75 0 1 1 1.048 1.074ZM4.75 4h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1 0-1.5ZM4 7.75A.75.75 0 0 1 4.75 7h2a.75.75 0 0 1 0 1.5h-2A.75.75 0 0 1 4 7.75Z"/></svg>');--md-admonition-icon--info:url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"/></svg>');--md-admonition-icon--tip:url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M3.499.75a.75.75 0 0 1 1.5 0v.996C5.9 2.903 6.793 3.65 7.662 4.376l.24.202c-.036-.694.055-1.422.426-2.163C9.1.873 10.794-.045 12.622.26 14.408.558 16 1.94 16 4.25c0 1.278-.954 2.575-2.44 2.734l.146.508.065.22c.203.701.412 1.455.476 2.226.142 1.707-.4 3.03-1.487 3.898C11.714 14.671 10.27 15 8.75 15h-6a.75.75 0 0 1 0-1.5h1.376a4.484 4.484 0 0 1-.563-1.191 3.835 3.835 0 0 1-.05-2.063 4.647 4.647 0 0 1-2.025-.293.75.75 0 0 1 .525-1.406c1.357.507 2.376-.006 2.698-.318l.009-.01a.747.747 0 0 1 1.06 0 .748.748 0 0 1-.012 1.074c-.912.92-.992 1.835-.768 2.586.221.74.745 1.337 1.196 1.621H8.75c1.343 0 2.398-.296 3.074-.836.635-.507 1.036-1.31.928-2.602-.05-.603-.216-1.224-.422-1.93l-.064-.221c-.12-.407-.246-.84-.353-1.29a2.425 2.425 0 0 1-.507-.441 3.075 3.075 0 0 1-.633-1.248.75.75 0 0 1 1.455-.364c.046.185.144.436.31.627.146.168.353.305.712.305.738 0 1.25-.615 1.25-1.25 0-1.47-.95-2.315-2.123-2.51-1.172-.196-2.227.387-2.706 1.345-.46.92-.27 1.774.019 3.062l.042.19a.884.884 0 0 1 .01.05c.348.443.666.949.94 1.553a.75.75 0 1 1-1.365.62c-.553-1.217-1.32-1.94-2.3-2.768L6.7 5.527c-.814-.68-1.75-1.462-2.692-2.619a3.737 3.737 0 0 0-1.023.88c-.406.495-.663 1.036-.722 1.508.116.122.306.21.591.239.388.038.797-.06 1.032-.19a.75.75 0 0 1 .728 1.31c-.515.287-1.23.439-1.906.373-.682-.067-1.473-.38-1.879-1.193L.75 5.677V5.5c0-.984.48-1.94 1.077-2.664.46-.559 1.05-1.055 1.673-1.353V.75Z"/></svg>');--md-admonition-icon--success:url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"/></svg>');--md-admonition-icon--question:url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.92 6.085h.001a.749.749 0 1 1-1.342-.67c.169-.339.436-.701.849-.977C6.845 4.16 7.369 4 8 4a2.756 2.756 0 0 1 1.637.525c.503.377.863.965.863 1.725 0 .448-.115.83-.329 1.15-.205.307-.47.513-.692.662-.109.072-.22.138-.313.195l-.006.004a6.24 6.24 0 0 0-.26.16.952.952 0 0 0-.276.245.75.75 0 0 1-1.248-.832c.184-.264.42-.489.692-.661.103-.067.207-.132.313-.195l.007-.004c.1-.061.182-.11.258-.161a.969.969 0 0 0 .277-.245C8.96 6.514 9 6.427 9 6.25a.612.612 0 0 0-.262-.525A1.27 1.27 0 0 0 8 5.5c-.369 0-.595.09-.74.187a1.01 1.01 0 0 0-.34.398ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"/></svg>');--md-admonition-icon--warning:url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"/></svg>');--md-admonition-icon--failure:url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M2.344 2.343h-.001a8 8 0 0 1 11.314 11.314A8.002 8.002 0 0 1 .234 10.089a8 8 0 0 1 2.11-7.746Zm1.06 10.253a6.5 6.5 0 1 0 9.108-9.275 6.5 6.5 0 0 0-9.108 9.275ZM6.03 4.97 8 6.94l1.97-1.97a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l1.97 1.97a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-1.97 1.97a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L6.94 8 4.97 6.03a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018Z"/></svg>');--md-admonition-icon--danger:url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M9.504.43a1.516 1.516 0 0 1 2.437 1.713L10.415 5.5h2.123c1.57 0 2.346 1.909 1.22 3.004l-7.34 7.142a1.249 1.249 0 0 1-.871.354h-.302a1.25 1.25 0 0 1-1.157-1.723L5.633 10.5H3.462c-1.57 0-2.346-1.909-1.22-3.004L9.503.429Zm1.047 1.074L3.286 8.571A.25.25 0 0 0 3.462 9H6.75a.75.75 0 0 1 .694 1.034l-1.713 4.188 6.982-6.793A.25.25 0 0 0 12.538 7H9.25a.75.75 0 0 1-.683-1.06l2.008-4.418.003-.006a.036.036 0 0 0-.004-.009l-.006-.006-.008-.001c-.003 0-.006.002-.009.004Z"/></svg>');--md-admonition-icon--bug:url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M4.72.22a.75.75 0 0 1 1.06 0l1 .999a3.488 3.488 0 0 1 2.441 0l.999-1a.748.748 0 0 1 1.265.332.75.75 0 0 1-.205.729l-.775.776c.616.63.995 1.493.995 2.444v.327c0 .1-.009.197-.025.292.408.14.764.392 1.029.722l1.968-.787a.75.75 0 0 1 .556 1.392L13 7.258V9h2.25a.75.75 0 0 1 0 1.5H13v.5c0 .409-.049.806-.141 1.186l2.17.868a.75.75 0 0 1-.557 1.392l-2.184-.873A4.997 4.997 0 0 1 8 16a4.997 4.997 0 0 1-4.288-2.427l-2.183.873a.75.75 0 0 1-.558-1.392l2.17-.868A5.036 5.036 0 0 1 3 11v-.5H.75a.75.75 0 0 1 0-1.5H3V7.258L.971 6.446a.75.75 0 0 1 .558-1.392l1.967.787c.265-.33.62-.583 1.03-.722a1.677 1.677 0 0 1-.026-.292V4.5c0-.951.38-1.814.995-2.444L4.72 1.28a.75.75 0 0 1 0-1.06Zm.53 6.28a.75.75 0 0 0-.75.75V11a3.5 3.5 0 1 0 7 0V7.25a.75.75 0 0 0-.75-.75ZM6.173 5h3.654A.172.172 0 0 0 10 4.827V4.5a2 2 0 1 0-4 0v.327c0 .096.077.173.173.173Z"/></svg>');--md-admonition-icon--example:url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M5 5.782V2.5h-.25a.75.75 0 0 1 0-1.5h6.5a.75.75 0 0 1 0 1.5H11v3.282l3.666 5.76C15.619 13.04 14.543 15 12.767 15H3.233c-1.776 0-2.852-1.96-1.899-3.458Zm-2.4 6.565a.75.75 0 0 0 .633 1.153h9.534a.75.75 0 0 0 .633-1.153L12.225 10.5h-8.45ZM9.5 2.5h-3V6c0 .143-.04.283-.117.403L4.73 9h6.54L9.617 6.403A.746.746 0 0 1 9.5 6Z"/></svg>');--md-admonition-icon--quote:url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M1.75 2.5h10.5a.75.75 0 0 1 0 1.5H1.75a.75.75 0 0 1 0-1.5Zm4 5h8.5a.75.75 0 0 1 0 1.5h-8.5a.75.75 0 0 1 0-1.5Zm0 5h8.5a.75.75 0 0 1 0 1.5h-8.5a.75.75 0 0 1 0-1.5ZM2.5 7.75v6a.75.75 0 0 1-1.5 0v-6a.75.75 0 0 1 1.5 0Z"/></svg>');}</style>
+
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+    <meta name="theme-color" content="#e92063">
+
+    
+    
+      
+    
+
+    
+    
+      
+    
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="The Upper Limits of WebAssembly Net Performance" />
+    <meta property="og:description" content="Winter.js's web assembly performance looked sus, so I did some digging" />
+    <meta property="og:url" content="https://www.ajanibilby.com/blog/the-upper-limit-of-wasm-performance/" />
+    <!-- <meta property="og:image" content="<url>" /> -->
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    
+      <meta name="robots" content="index, follow" />
+    
+  
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="pink" data-md-color-accent="purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#banging-some-rocks" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Ajani Bilby" class="md-header__button md-logo" aria-label="Ajani Bilby" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.5 5A1.5 1.5 0 0 0 7 6.5 1.5 1.5 0 0 0 8.5 8 1.5 1.5 0 0 0 10 6.5 1.5 1.5 0 0 0 8.5 5M10 2a5 5 0 0 1 5 5c0 1.7-.85 3.2-2.14 4.1 1.58.15 3.36.51 5.14 1.4 3 1.5 4-.5 4-.5s-1 9-7 9H9s-5 0-5-5c0-3 3-4 2-6-4 0-4-3.5-4-3.5 1 .5 2.24.5 3 .15A5.02 5.02 0 0 1 10 2Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Ajani Bilby
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              The Upper Limits of WebAssembly Net Performance
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="pink" data-md-color-accent="purple"  aria-hidden="true"  type="radio" name="__palette" id="__palette_0">
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7 0-.24-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91 1.61 0 2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08Z"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../project/" class="md-tabs__link">
+        
+  
+    
+  
+  Projects
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../" class="md-tabs__link">
+        
+  
+    
+  
+  Blog
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../reading-list/" class="md-tabs__link">
+        
+  
+    
+  
+  Reading List
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" hidden>
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Ajani Bilby" class="md-nav__button md-logo" aria-label="Ajani Bilby" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8.5 5A1.5 1.5 0 0 0 7 6.5 1.5 1.5 0 0 0 8.5 8 1.5 1.5 0 0 0 10 6.5 1.5 1.5 0 0 0 8.5 5M10 2a5 5 0 0 1 5 5c0 1.7-.85 3.2-2.14 4.1 1.58.15 3.36.51 5.14 1.4 3 1.5 4-.5 4-.5s-1 9-7 9H9s-5 0-5-5c0-3 3-4 2-6-4 0-4-3.5-4-3.5 1 .5 2.24.5 3 .15A5.02 5.02 0 0 1 10 2Z"/></svg>
+
+    </a>
+    Ajani Bilby
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../project/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Projects
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Blog
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reading-list/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Reading List
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#banging-some-rocks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Banging Some Rocks
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-methodology" class="md-nav__link">
+    <span class="md-ellipsis">
+      Testing Methodology
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#results" class="md-nav__link">
+    <span class="md-ellipsis">
+      Results
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#so-lets-look-at-the-syscalls" class="md-nav__link">
+    <span class="md-ellipsis">
+      So Let's Look at the Syscalls
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      Summary
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+  
+  
+
+<nav class="md-tags" >
+  
+    
+    
+    
+      <a href="../../tags/#web-assembly" class="md-tag">web assembly</a>
+    
+  
+    
+    
+    
+      <a href="../../tags/#performance" class="md-tag">performance</a>
+    
+  
+    
+    
+    
+      <a href="../../tags/#http" class="md-tag">http</a>
+    
+  
+</nav>
+
+
+  
+  
+
+
+  <h1>The Upper Limits of WebAssembly Net Performance</h1>
+
+<p>Wasmer.io recently released an article announcing their <a href="https://wasmer.io/posts/winterjs-v1">Winter.js 1.0</a>, however looking at the details of their <a href="https://github.com/wasmerio/winterjs/tree/main/benchmark">benchmarks</a> it shows that running Winter.js in wasm results in a 12x slow down in performance compared to native.</p>
+<p>That large a performance difference just doesn't sit right with me based on my experience with wasm, yes it should be slower, I would believe 4x, but 12x!?!?!? What is this, a PC port of a console game?</p>
+<p>Looking at the code bases of most current software with wasm support, if you get to the underlying implementation - it's a lot closer to a software port, than a new target assembly.
+I would be willing to bet that over the coming years you will all sorts of 2x 4x 10x articles, about how software X massively improved their wasm performance since they started putting dev hours into it because the technology became relevant.</p>
+<p>But I want to know what is the upper limit of wasm, what will be those future performance gains? I don't have a crystal ball, but I do have two smooth rocks in my back-yard and an IDE, so let's hand roll some web assembly and find out.</p>
+<h2 id="banging-some-rocks">Banging Some Rocks</h2>
+<p>First of all we're going to need to bind some OS functions, so we can talk to the OS's network layer. This is done via functions very similar to the POSIX standard called <a href="https://wasix.org/">WASIX</a>.
+They get imported in kind of a similar way to a DLL, where you specify which functions you're trying to load and from where.</p>
+<p>But how do you know where to import these functions?<br />
+Idk bro, I just grepped the <a href="https://github.com/wasix-org/wasix-libc">wasix-libc</a> till I found something that looked right.</p>
+<p>There is another important bit to note, Web Assembly is designed for the web, and thus to be sent over the network, so the binaries are designed to be very small. So there is a lot of features to reduce the number of bytes in a binary such as <a href="https://en.wikipedia.org/wiki/LEB128">LEB128</a> integer encoding. But more importantly for us, it means that function signatures are declared separately to function bodies so they can be reused. So you end up with something kind of cursed like this.
+<div class="highlight"><span class="filename">Import Section</span><pre><span></span><code><span class="p">(</span><span class="k">type</span> <span class="cm">(;0;)</span> <span class="p">(</span><span class="k">func</span> <span class="p">(</span><span class="k">param</span> <span class="kt">i32</span><span class="p">)</span> <span class="p">(</span><span class="k">result</span> <span class="kt">i32</span><span class="p">)))</span>
+<span class="p">(</span><span class="k">type</span> <span class="cm">(;1;)</span> <span class="p">(</span><span class="k">func</span> <span class="p">(</span><span class="k">param</span> <span class="kt">i32</span> <span class="kt">i32</span><span class="p">)</span> <span class="p">(</span><span class="k">result</span> <span class="kt">i32</span><span class="p">)))</span>
+<span class="p">(</span><span class="k">type</span> <span class="cm">(;2;)</span> <span class="p">(</span><span class="k">func</span> <span class="p">(</span><span class="k">param</span> <span class="kt">i32</span> <span class="kt">i32</span> <span class="kt">i32</span><span class="p">)</span> <span class="p">(</span><span class="k">result</span> <span class="kt">i32</span><span class="p">)))</span>
+<span class="p">(</span><span class="k">type</span> <span class="cm">(;3;)</span> <span class="p">(</span><span class="k">func</span> <span class="p">(</span><span class="k">param</span> <span class="kt">i32</span> <span class="kt">i32</span> <span class="kt">i32</span> <span class="kt">i32</span><span class="p">)</span> <span class="p">(</span><span class="k">result</span> <span class="kt">i32</span><span class="p">)))</span>
+<span class="p">(</span><span class="k">type</span> <span class="cm">(;4;)</span> <span class="p">(</span><span class="k">func</span> <span class="p">(</span><span class="k">param</span> <span class="kt">i32</span> <span class="kt">i32</span> <span class="kt">i32</span> <span class="kt">i32</span> <span class="kt">i32</span><span class="p">)</span> <span class="p">(</span><span class="k">result</span> <span class="kt">i32</span><span class="p">)))</span>
+<span class="p">(</span><span class="k">type</span> <span class="cm">(;5;)</span> <span class="p">(</span><span class="k">func</span><span class="p">))</span>
+<span class="p">(</span><span class="k">type</span> <span class="cm">(;6;)</span> <span class="p">(</span><span class="k">func</span> <span class="p">(</span><span class="k">param</span> <span class="kt">i32</span><span class="p">)))</span>
+<span class="p">(</span><span class="k">type</span> <span class="cm">(;7;)</span> <span class="p">(</span><span class="k">func</span> <span class="p">(</span><span class="k">param</span> <span class="kt">i32</span> <span class="kt">i32</span><span class="p">)))</span>
+<span class="p">(</span><span class="k">import</span> <span class="s2">&quot;wasix_32v1&quot;</span> <span class="s2">&quot;fd_write&quot;</span> <span class="p">(</span><span class="k">func</span> <span class="cm">(;0;)</span> <span class="p">(</span><span class="k">type</span> <span class="mi">3</span><span class="p">)))</span>
+<span class="p">(</span><span class="k">import</span> <span class="s2">&quot;wasix_32v1&quot;</span> <span class="s2">&quot;fd_close&quot;</span> <span class="p">(</span><span class="k">func</span> <span class="cm">(;1;)</span> <span class="p">(</span><span class="k">type</span> <span class="mi">0</span><span class="p">)))</span>
+<span class="p">(</span><span class="k">import</span> <span class="s2">&quot;wasix_32v1&quot;</span> <span class="s2">&quot;sock_open&quot;</span>      <span class="p">(</span><span class="k">func</span> <span class="cm">(;2;)</span> <span class="p">(</span><span class="k">type</span> <span class="mi">3</span><span class="p">)))</span>
+<span class="p">(</span><span class="k">import</span> <span class="s2">&quot;wasix_32v1&quot;</span> <span class="s2">&quot;sock_bind&quot;</span>      <span class="p">(</span><span class="k">func</span> <span class="cm">(;3;)</span> <span class="p">(</span><span class="k">type</span> <span class="mi">1</span><span class="p">)))</span>
+<span class="p">(</span><span class="k">import</span> <span class="s2">&quot;wasix_32v1&quot;</span> <span class="s2">&quot;sock_listen&quot;</span>    <span class="p">(</span><span class="k">func</span> <span class="cm">(;4;)</span> <span class="p">(</span><span class="k">type</span> <span class="mi">1</span><span class="p">)))</span>
+<span class="p">(</span><span class="k">import</span> <span class="s2">&quot;wasix_32v1&quot;</span> <span class="s2">&quot;sock_accept_v2&quot;</span> <span class="p">(</span><span class="k">func</span> <span class="cm">(;5;)</span> <span class="p">(</span><span class="k">type</span> <span class="mi">3</span><span class="p">)))</span>
+<span class="p">(</span><span class="k">import</span> <span class="s2">&quot;wasix_32v1&quot;</span> <span class="s2">&quot;sock_send&quot;</span>      <span class="p">(</span><span class="k">func</span> <span class="cm">(;6;)</span> <span class="p">(</span><span class="k">type</span> <span class="mi">4</span><span class="p">)))</span>
+<span class="p">(</span><span class="k">import</span> <span class="s2">&quot;wasix_32v1&quot;</span> <span class="s2">&quot;sock_status&quot;</span>    <span class="p">(</span><span class="k">func</span> <span class="cm">(;7;)</span> <span class="p">(</span><span class="k">type</span> <span class="mi">1</span><span class="p">)))</span>
+<span class="p">(</span><span class="k">import</span> <span class="s2">&quot;wasix_32v1&quot;</span> <span class="s2">&quot;proc_exit&quot;</span>      <span class="p">(</span><span class="k">func</span> <span class="cm">(;8;)</span> <span class="p">(</span><span class="k">type</span> <span class="mi">6</span><span class="p">)))</span>
+<span class="p">(</span><span class="k">import</span> <span class="s2">&quot;wasix_32v1&quot;</span> <span class="s2">&quot;sock_shutdown&quot;</span>  <span class="p">(</span><span class="k">func</span> <span class="cm">(;9;)</span> <span class="p">(</span><span class="k">type</span> <span class="mi">1</span><span class="p">)))</span>
+</code></pre></div></p>
+<p>Now we have an outline of all of the functions we're going to use, let's quickly map out the lifetime of our program.
+We're really trying to just test the performance of the WASIX network stack, so doing anything to funky with multithreading or advanced algorithms would be more a test of current runtime multithreaded implementation than the root performance drops that might never be removable from the networking interface.</p>
+<p>So we want a really hot single threaded loop, that means blocking, but we want to only block in times our CPU couldn't be doing something else anyway.
+We also literally don't care anything about what the incoming request says, because we're testing raw TCP throughput request.</p>
+<pre class="mermaid"><code>graph TD;
+  Start --&gt; sock_open["Create OS socket"]
+  sock_open --&gt; sock_bind["Tell OS our plans for the socket"]
+  sock_bind --&gt; sock_listen["Tell OS we want incoming connections, and to buffer them"]
+  sock_listen --&gt; sock_accept_v2["Wait for a request to arrive"]
+  sock_accept_v2 --&gt; sock_send["Send message to request"]
+  sock_send --&gt; sock_shutdown["Close incoming request"]
+  sock_shutdown --&gt; sock_accept_v2</code></pre>
+<p>Our whole program is pretty much setup, then a loop with three functions in it can go around blazingly fast.</p>
+<p>First of all let's get our data out of the way</p>
+<ul>
+<li>Opening on the same port for incoming requests</li>
+<li>We're always replying with the same message</li>
+<li>Only Responding to one request at a time</li>
+</ul>
+<p>This means all of this memory can be predefined at compile time to be reused.</p>
+<hr />
+<p>So we'll make our struct defining what we're listening for:
+<div class="highlight"><span class="filename">sockaddr_in</span><pre><span></span><code><span class="p">(</span><span class="k">data</span> <span class="p">(</span><span class="nb">i32.const</span> <span class="mi">48</span><span class="p">)</span> <span class="s2">&quot;</span><span class="se">\01\00</span><span class="s2">&quot;</span><span class="p">)</span>                   <span class="c1">;; sin_family: AF_INET = 0x0001</span>
+<span class="p">(</span><span class="k">data</span> <span class="p">(</span><span class="nb">i32.const</span> <span class="mi">50</span><span class="p">)</span> <span class="s2">&quot;</span><span class="se">\90\1f</span><span class="s2">&quot;</span><span class="p">)</span>                   <span class="c1">;; sin_port:      8080 = 0x1F90</span>
+<span class="p">(</span><span class="k">data</span> <span class="p">(</span><span class="nb">i32.const</span> <span class="mi">52</span><span class="p">)</span> <span class="s2">&quot;</span><span class="se">\00\00\00\00</span><span class="s2">&quot;</span><span class="p">)</span>             <span class="c1">;; sin_addr:INADDR_ANY = 0.0.0.0</span>
+<span class="p">(</span><span class="k">data</span> <span class="p">(</span><span class="nb">i32.const</span> <span class="mi">56</span><span class="p">)</span> <span class="s2">&quot;</span><span class="se">\00\00\00\00\00\00\00\00</span><span class="s2">&quot;</span><span class="p">)</span> <span class="c1">;; sin_zero = char[8] padding for sockaddr compatibility</span>
+</code></pre></div></p>
+<p>Now we'll craft our output response - this is encoded with an <code>iovec</code> which is basically just two <code>i32</code> integers slapped together, the first is a pointer to the start of the buffer, and the second being the length of the buffer.
+<div class="highlight"><span class="filename">HTTP Response Data</span><pre><span></span><code><span class="p">(</span><span class="k">data</span> <span class="p">(</span><span class="nb">i32.const</span> <span class="mi">80</span><span class="p">)</span> <span class="s2">&quot;</span><span class="se">\58\00\00\00\24\00\00\00</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="p">(</span><span class="k">data</span> <span class="p">(</span><span class="nb">i32.const</span> <span class="mi">88</span><span class="p">)</span> <span class="s2">&quot;HTTP/1.1 200 OK</span><span class="se">\0d\0a\0d\0a</span><span class="s2">Hello, World!&quot;</span><span class="p">)</span>
+</code></pre></div></p>
+<p>When we get an incoming request we need a place to store it's details so we can tell the OS which request we're responding to.
+<div class="highlight"><span class="filename">remote sock_addr</span><pre><span></span><code><span class="p">(</span><span class="k">data</span> <span class="p">(</span><span class="nb">i32.const</span> <span class="mf">160</span><span class="p">)</span> <span class="s2">&quot;</span><span class="se">\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00\00</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1">;; stack: offset.255</span>
+</code></pre></div></p>
+<p>Imports done, global variables done, now we just need the actual code.</p>
+<hr />
+<p>First we need to define our function, and the fact it has two local variables, these will be used to store the file descriptor for the socket we have open, and the file descriptor socket of an incoming request.
+These local variables are a lot closer to user defined registers than actual variables.
+<div class="highlight"><pre><span></span><code><span class="p">(</span><span class="k">func</span> <span class="cm">(;10;)</span> <span class="p">(</span><span class="k">type</span> <span class="mi">5</span><span class="p">)</span> <span class="p">(</span><span class="k">local</span> <span class="kt">i32</span> <span class="kt">i32</span><span class="p">)</span>
+  <span class="c1">;; ...</span>
+<span class="p">)</span>
+</code></pre></div></p>
+<p>Now we create a new OS socket, specifying it's an IPv4 socket (<code>AF_INET</code>), and that it's using TCP (<code>SOCK_STREAM</code>), since the early specification of wasm doesn't allow multiple return, the return value from this first call is an error code - but we don't care about that.
+We give it a pointer to <code>255</code> which is a region that won't interfere with our global data, which after a successful call the file descriptor will be written there, then we load it to a local variable.
+<div class="highlight"><pre><span></span><code><span class="c1">;; Create socket using sock_open</span>
+<span class="nb">i32.const</span> <span class="mi">1</span>    <span class="c1">;; AF_NET</span>
+<span class="nb">i32.const</span> <span class="mi">1</span>    <span class="c1">;; SOCK_STREAM</span>
+<span class="nb">i32.const</span> <span class="mi">0</span>    <span class="c1">;; Protocol</span>
+<span class="nb">i32.const</span> <span class="mf">255</span>  <span class="c1">;; result pointer</span>
+<span class="nb">call</span> <span class="mi">2</span>         <span class="c1">;; sock_open()</span>
+<span class="nb">drop</span>           <span class="c1">;; we don&#39;t care about errors</span>
+
+<span class="c1">;; Load the socket descriptor from memory</span>
+<span class="nb">i32.const</span> <span class="mf">255</span>
+<span class="nb">i32.load</span>
+<span class="nb">local.set</span> <span class="mi">0</span>
+</code></pre></div></p>
+<p>Next step, bind the socket to the <code>sockaddr_in</code> we defined earlier in global memory
+<div class="highlight"><pre><span></span><code><span class="c1">;; Bind socket to address and port</span>
+<span class="nb">local.get</span> <span class="mi">0</span>   <span class="c1">;; Socket file descriptor</span>
+<span class="nb">i32.const</span> <span class="mi">48</span>  <span class="c1">;; Address of the sockaddr_in structure</span>
+<span class="nb">call</span> <span class="mi">3</span>        <span class="c1">;; sock_bind()</span>
+<span class="nb">drop</span>          <span class="c1">;; if it&#39;s not going to error, hopefully</span>
+</code></pre></div></p>
+<p>Tell the OS we're listening for requests, and queue up to 100 pending connections
+<div class="highlight"><pre><span></span><code><span class="c1">;; Listen for incoming connections</span>
+<span class="nb">local.get</span> <span class="mi">0</span>     <span class="c1">;; Socket file descriptor</span>
+<span class="nb">i32.const</span> <span class="mf">100</span>   <span class="c1">;; Backlog (maximum pending connections)</span>
+<span class="nb">call</span> <span class="mi">4</span>          <span class="c1">;; sock_listen()</span>
+<span class="nb">drop</span>            <span class="c1">;; it&#39;s just wasted cycles</span>
+</code></pre></div></p>
+<p>Now for the hot loop
+<div class="highlight"><pre><span></span><code><span class="p">(</span><span class="k">loop</span>
+  <span class="nb">local.get</span> <span class="mi">0</span>    <span class="c1">;; Listening socket file descriptor</span>
+  <span class="nb">i32.const</span> <span class="mi">0</span>    <span class="c1">;; Desired file descriptor flags (default)</span>
+  <span class="nb">i32.const</span> <span class="mi">64</span>   <span class="c1">;; result pointer: new socket</span>
+  <span class="nb">i32.const</span> <span class="mf">160</span>  <span class="c1">;; result pointer: remote address</span>
+  <span class="nb">call</span> <span class="mi">5</span>         <span class="c1">;; sock_accept_v2()</span>
+  <span class="nb">drop</span>           <span class="c1">;; we only accept winners in these parts</span>
+
+  <span class="c1">;; Load the new socket descriptor from memory</span>
+  <span class="nb">i32.const</span> <span class="mi">64</span>
+  <span class="nb">i32.load</span>
+  <span class="nb">local.set</span> <span class="mi">1</span>
+
+  <span class="c1">;; Send response to the client</span>
+  <span class="nb">local.get</span> <span class="mi">1</span>    <span class="c1">;; socket</span>
+  <span class="nb">i32.const</span> <span class="mi">80</span>   <span class="c1">;; iovs</span>
+  <span class="nb">i32.const</span> <span class="mi">1</span>    <span class="c1">;; iovs_len</span>
+  <span class="nb">i32.const</span> <span class="mi">0</span>    <span class="c1">;; No additional flags</span>
+  <span class="nb">i32.const</span> <span class="mf">160</span>  <span class="c1">;; ptr: remote address</span>
+  <span class="nb">call</span> <span class="mi">6</span>         <span class="c1">;; sock_send()</span>
+  <span class="nb">drop</span>           <span class="c1">;; get dropped</span>
+
+  <span class="c1">;; Shutdown the socket</span>
+  <span class="nb">local.get</span> <span class="mi">1</span> <span class="c1">;; socket</span>
+  <span class="nb">i32.const</span> <span class="mi">2</span> <span class="c1">;; how: SHUT_RDWR</span>
+  <span class="nb">call</span> <span class="mi">9</span>      <span class="c1">;; sock_shutdown()</span>
+  <span class="nb">drop</span>        <span class="c1">;; we&#39;re done here</span>
+
+  <span class="c1">;; Close the fd</span>
+  <span class="nb">local.get</span> <span class="mi">1</span> <span class="c1">;; socket</span>
+  <span class="nb">call</span> <span class="mi">1</span>      <span class="c1">;; fd_close()</span>
+  <span class="nb">drop</span>        <span class="c1">;; bye</span>
+
+  <span class="nb">br</span> <span class="mi">0</span>
+<span class="p">)</span>
+</code></pre></div></p>
+<h2 id="testing-methodology">Testing Methodology</h2>
+<p>For testing we want something directly comparable with Winter.js's benchmark so we used <a href="https://github.com/wg/wrk">Wrk</a> which is made for linux systems.<br />
+So a linux system we shall go.</p>
+<p>Dual booting with modern Windows + secure boot + TPMs make life painful, so my system doesn't run native linux.<br />
+A VPS could have noisy neighbours which will skew results so we can't use one of those.<br />
+I had issues compiling some of this stuff for ARM, so Raspberry Pi 4 is out the window.<br />
+So I used wsl, which definitely hurt performance - but it will hurt everyone's performance equally so that's okay.   </p>
+<p>I ran the <a href="appendix/#benchmark-source"><code>server.wat</code></a> through <code>wasmer direct</code>, as well as using <code>wasmer create-exe --llvm</code> to get the highest web assembly performance possible.
+However Winter.js giving the same treatment to it's wasm port caused a compilation error I'd need a full time job to debug.</p>
+<p>I rewrote the <code>server.wat</code> in C to make <a href="appendix/#benchmark-source"><code>server.c</code></a> as an apples to apples native comparison.</p>
+<p>I also ran Winter.js's NodeJS and Bun benchmarks to have a shared point of reference.</p>
+<p>For each test I ran it three times, taking the median <code>req/sec avg</code> value for the graph below.</p>
+<h2 id="results">Results</h2>
+<div class="highlight"><pre><span></span><code>wrk<span class="w"> </span>-t12<span class="w"> </span>-c400<span class="w"> </span>-d10s<span class="w"> </span>http://127.0.0.1:8080
+</code></pre></div>
+<p><img alt="Chart" src="chart.jpg" /></p>
+<blockquote>
+<p>*I was unable to get Winter.js to compile, so the value on this graph is an estimate based on it's relative performance to <code>Bun</code>, <code>Node</code> and <code>Winter.js (WASIX)</code>. For exact details you can see the spreadsheet <a href="chart.xlsx">here</a></p>
+</blockquote>
+<p>Initially looking at these results the Bun and Winter.js seem super sus if we assume they were single threaded, since the underlying Javascript should be executing on a single thread (this is also why I didn't test Go).</p>
+<p>If we think about our hot loop flow path, at what times are we waiting when we could be executing the response (limited to a single thread)?<br />
+The only time the listen blocks, is when there are no pending requests because we're waiting for the next request.<br />
+And when there is a request waiting the function should instantly return.</p>
+<p>When we send data down the socket, there is no waiting their either, because the OS wait for confirmation a single packet is received before sending the next one away.<br />
+Shutting down the socket and closing the file descriptor would trigger OS level cleaning of those utilise which would also not cause a wait.<br />
+Assuming all of these are handled well by the OS there shouldn't be much of a wait we're only sending and receiving <strong>tens</strong> of bytes.</p>
+<h2 id="so-lets-look-at-the-syscalls">So Let's Look at the Syscalls</h2>
+<p>So I ran the <code>server.wat</code> again, this time with tracing, and then I manually removed the first couple of lines to the logs start when it listens for it's second ever request.
+Since the first request will have a long blocking period, because I haven't started the <code>wrk</code> command yet.
+<div class="highlight"><span class="filename">RUST_LOG=wasmer_wasix=trace wasmer run server.wat --net &> log.txt</span><pre><span></span><code>sock_accept_v2: wasmer_wasix::syscalls::wasix::sock_accept: return=Ok(Errno::success) sock=6 fd=9614
+sock_accept_v2: wasmer_wasix::syscalls::wasix::sock_accept: close time.busy=137µs time.idle=1.01µs sock=6 fd=9614
+sock_send: wasmer_wasix::syscalls::wasix::sock_send: bytes_written=36 fd=9614
+sock_send: wasmer_wasix::syscalls::wasix::sock_send: return=Ok(Errno::success) fd=9614 nsent=36
+sock_send: wasmer_wasix::syscalls::wasix::sock_send: close time.busy=224µs time.idle=842ns fd=9614 nsent=36
+sock_shutdown: wasmer_wasix::syscalls::wasix::sock_shutdown: return=Ok(Errno::notconn) sock=9614
+sock_shutdown: wasmer_wasix::syscalls::wasix::sock_shutdown: close time.busy=91.6µs time.idle=781ns sock=9614
+fd_close: wasmer_wasix::fs: closing file descriptor fd=9614 inode=9615 ref_cnt=1 pid=1 fd=9614
+fd_close: wasmer_wasix::syscalls::wasi::fd_close: return=Ok(Errno::success) pid=1 fd=9614
+fd_close: wasmer_wasix::syscalls::wasi::fd_close: close time.busy=191µs time.idle=852ns pid=1 fd=9614
+</code></pre></div></p>
+<p>Now we'll do a little bit of python to get the aggregate values, since our hot loop is really tight, it doesn't matter if we sum or mean our <code>time</code>s per call, because each call is made once per iteration.</p>
+<p><img alt="syscall graph" src="sys-call-graph.png" /></p>
+<p>From this it's obvious that our assumption was partly correct, <code>sock_shutdown</code> does basically nothing, same with <code>sock_accept_v2</code> since we have constant incoming requests, but there are two big problems, the <code>fd_close</code> and <code>sock_send</code>.  </p>
+<p><code>fd_close</code> presumably runs all of the necessary OS cleanup on the file descriptor then and there before switching context back to our app, and this is also likely the same for <code>sock_send</code> since in comparison to most system calls, they're very cheap.<br />
+The problems is that since we're only making cheap alls, to us they're quite expensive - and this is where Winter.js and Bun can run ahead.</p>
+<p>Depending on what mechanism you use to communicate between threads in a program, it can be cheaper than a system call. Hence if instead of doing the expensive <code>sock_send</code>, <code>sock_shutdown</code> and <code>fd_close</code> on our main thread we just throw them over to a secondary slave thread to do our dirty-laundry we could actually seem measurable performance increases. Which is likely the main reason why Winter.js and Bun can pull ahead - because they're likely both doing this.</p>
+<p>This is also likely the reason why Winter.js in wasm is super slow, because the multithreaded model in Web Assembly might not be highly optimised, hence the communication between threads could end up being more costly that just running the system call.
+This would get us the exact results we saw in our first graph.</p>
+<h2 id="summary">Summary</h2>
+<p>Just like I said in the beginning there is a big chance that current web assembly performance will increase at the programming language level, I think there is still room for improvement based on these graphs.
+Web Assembly didn't start with a multithreading specification, it was added later and is still a flag you have to enable on some runtimes, so it makes sense that it might not be well optimised yet.
+This is then likely compounded by the fact no programming language is probably using the existing multithreaded systems properly, so the optimisation focused is more on the languages rather than the runtimes.</p>
+<p>I don't think Web Assembly will ever reach the performance of native, but that's not the point, all it needs to be is on par with the performance of current virtualisation platforms.
+Based on the fact that we can already touch Node performance, the currently available runtimes are suitable for a lot of current server workloads - the question is if it can get to the point where it's applicable for all server work loads.
+Where you can just push your complete server bundled as single wasm binary, specify a few environment variables and let the data centers handle it from there.</p>
+<hr />
+<p>Source code for benchmarks and raw results can be found in the <a href="appendix/">Appendix</a></p>
+
+
+
+
+
+
+
+  
+    
+  
+  
+
+
+  <aside class="md-source-file">
+    
+      
+  <span class="md-source-file__fact">
+    <span class="md-icon" title="Last update">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
+    </span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">June 8, 2024</span>
+  </span>
+
+    
+    
+    
+    
+  </aside>
+
+
+
+  
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2021 Ajani James Bilby
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.linkedin.com/in/ajani-b-00ba15156/" target="_blank" rel="noopener" title="www.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/AjaniBilby" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="mailto:me@ajanibilby.com" target="_blank" rel="noopener" title="" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4l217.6 163.2c11.4 8.5 27 8.5 38.4 0l217.6-163.2c12.1-9.1 19.2-23.3 19.2-38.4 0-26.5-21.5-48-48-48H48zM0 176v208c0 35.3 28.7 64 64 64h384c35.3 0 64-28.7 64-64V176L294.4 339.2a63.9 63.9 0 0 1-76.8 0L0 176z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["search.suggest", "search.share", "header.autohide", "content.code.annotate", "navigation.top", "navigation.tabs", "navigation.sticky"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.ad660dcc.min.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
